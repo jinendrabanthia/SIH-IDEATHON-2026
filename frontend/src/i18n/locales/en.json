@@ -1,0 +1,47 @@
+{
+  "app": {
+    "name": "TravelTrust",
+    "tagline": "Your Trustworthy Travel Companion",
+    "description": "Plan trips with verified information you can trust"
+  },
+  "nav": {
+    "home": "Home",
+    "plan": "Plan a Trip",
+    "myTrips": "My Trips",
+    "language": "Language",
+    "login": "Sign In",
+    "logout": "Sign Out"
+  },
+  "trust": {
+    "verified": "Verified",
+    "verified_desc": "Confirmed by an official source",
+    "live": "Live",
+    "live_desc": "Real-time data from a live feed",
+    "community": "Community",
+    "community_desc": "Reported by community members",
+    "inferred": "AI Inferred",
+    "inferred_desc": "Estimated by AI — not independently verified",
+    "unverified": "Unverified",
+    "unverified_desc": "Not yet verified — confirm before visiting",
+    "outdated": "Outdated",
+    "outdated_desc": "Information may no longer be current",
+    "disputed": "Disputed",
+    "disputed_desc": "Conflicting sources — treat with caution",
+    "unknown": "Unknown ⚠ Not verified"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try Again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next",
+    "back": "Back",
+    "search": "Search",
+    "noResults": "No results found",
+    "source": "Source",
+    "lastChecked": "Last checked",
+    "viewDetails": "View Details",
+    "alternatives": "Alternatives Available"
+  }
+}
