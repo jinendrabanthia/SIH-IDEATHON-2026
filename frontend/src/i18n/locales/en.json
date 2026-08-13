@@ -42,6 +42,8 @@
     "source": "Source",
     "lastChecked": "Last checked",
     "viewDetails": "View Details",
-    "alternatives": "Alternatives Available"
+    "alternatives": "Alternatives Available",
+    "planTrip": "Plan a Trip",
+    "generate": "Generate Itinerary"
   }
 }

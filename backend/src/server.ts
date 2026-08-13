@@ -26,6 +26,7 @@ import attractionsRouter from './modules/attractions/index.js';
 import liveDataRouter from './modules/live-data/index.js';
 import plannerRouter from './modules/planner/index.js';
 import nluRouter from './modules/nlu/index.js';
+import feedbackRouter from './modules/feedback/index.js';
 
 // ─── API v1 Routes (will be added per phase) ────────────────────────────────
 app.use('/api/v1/knowledge', knowledgeRouter);
@@ -33,6 +34,7 @@ app.use('/api/v1/attractions', attractionsRouter);
 app.use('/api/v1/live', liveDataRouter);
 app.use('/api/v1/planner', plannerRouter);
 app.use('/api/v1/nlu', nluRouter);
+app.use('/api/v1/feedback', feedbackRouter);
 // app.use('/api/v1/auth', authRouter);
 // app.use('/api/v1/users', usersRouter);
 // app.use('/api/v1/trips', tripsRouter);
