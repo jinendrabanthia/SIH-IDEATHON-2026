@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { env } from '../../shared/config/index.js';
 import { AppError } from '../../shared/middleware/errorHandler.js';
 import { validateLLMNarration } from '../trust-validation/index.js';
 
@@ -9,7 +8,7 @@ const router = Router();
 // Schema for raw text extraction
 const extractSchema = z.object({
   prompt: z.string().min(5).max(1000),
-});
+}).strict();
 
 router.post('/extract', async (req, res, next) => {
   try {
@@ -39,14 +38,14 @@ router.post('/extract', async (req, res, next) => {
 // Schema for narrative generation
 const narrateSchema = z.object({
   itinerary: z.array(z.object({
-    attractionName: z.string(),
+    attractionName: z.string().max(200),
     startTime: z.string(),
     endTime: z.string(),
-    factId: z.string().optional(), // Provenance link for the LLM
-    description: z.string().optional(),
-  })),
-  validFactIds: z.array(z.string()),
-});
+    factId: z.string().optional(),
+    description: z.string().max(1000).optional(),
+  }).strict()).max(20),
+  validFactIds: z.array(z.string().uuid()).max(100),
+}).strict();
 
 router.post('/narrate', async (req, res, next) => {
   try {

@@ -20,7 +20,7 @@ const envSchema = z.object({
   ROUTING_API_KEY: z.string().min(1),
 
   // Auth
-  JWT_SECRET: z.string().min(16).default('dev-jwt-secret-change-me-in-production-1234567890'),
+  JWT_SECRET: z.string().min(16),
 
   // App
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -33,6 +33,15 @@ const parsed = envSchema.safeParse(process.env);
 if (!parsed.success) {
   console.error('❌ Invalid environment variables:');
   console.error(parsed.error.flatten().fieldErrors);
+  process.exit(1);
+}
+
+// Reject known-weak secrets in production
+if (
+  parsed.data.NODE_ENV === 'production' &&
+  parsed.data.JWT_SECRET.startsWith('dev-jwt-secret')
+) {
+  console.error('❌ JWT_SECRET must be changed from the dev placeholder in production.');
   process.exit(1);
 }
 

@@ -15,7 +15,7 @@ interface GenerateResponse {
   warnings: string[];
 }
 
-const API_BASE = 'http://localhost:3001/api/v1';
+const API_BASE = '/api/v1';
 
 function App() {
   const { t, i18n } = useTranslation();

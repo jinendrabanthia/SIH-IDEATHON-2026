@@ -29,7 +29,11 @@ export async function getRoute(
       throw new Error(`OpenRouteService returned ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      features?: Array<{
+        properties?: { segments?: Array<{ distance: number; duration: number }> };
+      }>;
+    };
     
     // ORS returns features[0].properties.segments[0]
     const segment = data.features?.[0]?.properties?.segments?.[0];
