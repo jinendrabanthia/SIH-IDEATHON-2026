@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ItineraryView } from './components/ItineraryView';
 import { TrustBadge } from './components/TrustBadge';
+import { SplitText } from './components/animations/SplitText';
+import { FadeContent } from './components/animations/FadeContent';
+import { Loader2, ShieldCheck, MapPin, Search, AlertTriangle } from 'lucide-react';
 
 // Interfaces for our API responses
 interface Destination {
@@ -45,7 +48,7 @@ function App() {
   const handleGenerate = async () => {
     if (!prompt.trim() || !selectedDestId) return;
     
-    setLoadingStep('Extracting intent...');
+    setLoadingStep('Verifying source facts...');
     setError(null);
     setItinerary(null);
     setNarration('');
@@ -75,7 +78,7 @@ function App() {
       if (!plannerRes.ok) throw new Error('Planner Generation failed');
       const { data: plannerData } = await plannerRes.json() as { data: GenerateResponse };
 
-      setLoadingStep('Generating trustworthy narrative...');
+      setLoadingStep('Finalizing trustworthy itinerary...');
       // 3. NLU Narrate
       const itineraryArray = plannerData.itinerary || (plannerData as any).itineraryItems || [];
       const narratePayload = itineraryArray.map((item: any) => ({
@@ -114,79 +117,146 @@ function App() {
   };
 
   return (
-    <div className="container" style={{ padding: '2rem 1rem', maxWidth: '800px', margin: '0 auto' }}>
+    <div className="container" style={{ paddingBottom: 'var(--space-16)' }}>
       
       {/* Header */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-        <h1 style={{ margin: 0, fontSize: '1.5rem', background: 'linear-gradient(to right, var(--color-primary), #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          TravelShield
-        </h1>
-        <div style={{ display: 'flex', gap: '1rem', background: 'rgba(255,255,255,0.05)', padding: '0.5rem', borderRadius: 'var(--radius-full)' }}>
-          <button className={`btn ${i18n.language === 'en' ? 'btn-primary' : ''}`} onClick={() => changeLanguage('en')} style={{ padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)' }}>EN</button>
-          <button className={`btn ${i18n.language === 'hi' ? 'btn-primary' : ''}`} onClick={() => changeLanguage('hi')} style={{ padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)' }}>HI</button>
-          <button className={`btn ${i18n.language === 'or' ? 'btn-primary' : ''}`} onClick={() => changeLanguage('or')} style={{ padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)' }}>OR</button>
+      <header style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        padding: 'var(--space-6) 0',
+        marginBottom: 'var(--space-8)',
+        borderBottom: '1px solid var(--color-border)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', color: 'var(--color-text-primary)' }}>
+          <ShieldCheck size={28} strokeWidth={2.5} color="var(--color-primary)" />
+          <span className="font-display" style={{ fontSize: '1.25rem' }}>TravelShield</span>
+        </div>
+        
+        <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+          <button className={`secondary-button ${i18n.language === 'en' ? 'active' : ''}`} onClick={() => changeLanguage('en')} style={{ background: i18n.language === 'en' ? 'var(--color-surface-hover)' : '' }}>EN</button>
+          <button className={`secondary-button ${i18n.language === 'hi' ? 'active' : ''}`} onClick={() => changeLanguage('hi')} style={{ background: i18n.language === 'hi' ? 'var(--color-surface-hover)' : '' }}>HI</button>
+          <button className={`secondary-button ${i18n.language === 'or' ? 'active' : ''}`} onClick={() => changeLanguage('or')} style={{ background: i18n.language === 'or' ? 'var(--color-surface-hover)' : '' }}>OR</button>
         </div>
       </header>
 
-      {/* Hero Input Section */}
-      <main style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-        <div className="glass" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <h2 style={{ fontSize: '2rem', textAlign: 'center', marginBottom: '0.5rem' }}>
-            {t('common.planTrip')}
-          </h2>
-          <p style={{ textAlign: 'center', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-            Zero hallucinations. 100% verified data.
-          </p>
-
-          <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <span style={{ fontWeight: 600 }}>Destination</span>
-              <select 
-                value={selectedDestId}
-                onChange={(e) => setSelectedDestId(e.target.value)}
-                style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'white' }}
-              >
-                {destinations.map(d => (
-                  <option key={d.id} value={d.id}>{d.name}, {d.country}</option>
-                ))}
-              </select>
-            </label>
-
-            <label style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <span style={{ fontWeight: 600 }}>What are you looking for?</span>
-              <textarea 
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="E.g., I want a relaxed trip for my family of 4. We will be driving our own car and need wheelchair access. We love history."
-                rows={4}
-                style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'white', resize: 'vertical' }}
-              />
-            </label>
-
-            <button 
-              className="btn btn-primary animate-pulse" 
-              onClick={handleGenerate}
-              disabled={!!loadingStep || !prompt.trim()}
-              style={{ padding: '1rem', marginTop: '0.5rem', fontSize: '1.1rem' }}
-            >
-              {loadingStep || t('common.generate')}
-            </button>
+      <main style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-16)' }}>
+        
+        {/* Hero Section */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+          gap: 'var(--space-12)',
+          alignItems: 'start'
+        }}>
+          {/* Typographic Hero */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)', paddingTop: 'var(--space-8)' }}>
+            <SplitText 
+              text={t('common.planTrip', { defaultValue: 'Design a Trip You Can Trust' })} 
+              className="font-display" 
+              style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1 }}
+            />
+            <FadeContent delay={0.4}>
+              <p style={{ fontSize: '1.125rem', maxWidth: '480px' }}>
+                Zero AI hallucinations. 100% verified ground truth data, dynamically cross-referenced for accessibility, crowds, and live status.
+              </p>
+            </FadeContent>
           </div>
-          
-          {error && <div style={{ color: '#ef4444', textAlign: 'center', marginTop: '1rem' }}>{error}</div>}
+
+          {/* Preference Setup Card */}
+          <FadeContent delay={0.2} direction="up" style={{ width: '100%' }}>
+            <div className="editorial-card" style={{ padding: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                <label style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: '0.875rem' }}>
+                  <MapPin size={16} /> Destination
+                </label>
+                <select 
+                  className="editorial-input"
+                  value={selectedDestId}
+                  onChange={(e) => setSelectedDestId(e.target.value)}
+                >
+                  {destinations.map(d => (
+                    <option key={d.id} value={d.id}>{d.name}, {d.country}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                <label style={{ fontWeight: 600, fontSize: '0.875rem' }}>Trip Preferences</label>
+                <textarea 
+                  className="editorial-input"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="E.g., I want a relaxed trip for my family of 4. We will be driving our own car and need wheelchair access. We love history."
+                  rows={4}
+                  style={{ resize: 'vertical' }}
+                />
+              </div>
+
+              <button 
+                className="primary-button" 
+                onClick={handleGenerate}
+                disabled={!!loadingStep || !prompt.trim()}
+                style={{ marginTop: 'var(--space-2)', width: '100%' }}
+              >
+                {loadingStep ? (
+                  <>
+                    <Loader2 className="animate-spin" size={18} />
+                    {loadingStep}
+                  </>
+                ) : (
+                  <>
+                    <Search size={18} />
+                    {t('common.generate', { defaultValue: 'Generate Itinerary' })}
+                  </>
+                )}
+              </button>
+              
+              {error && (
+                <div style={{ 
+                  color: 'var(--trust-unverified)', 
+                  background: 'var(--trust-unverified-bg)', 
+                  padding: 'var(--space-3)', 
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: '0.875rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-2)'
+                }}>
+                  <AlertTriangle size={16} /> {error}
+                </div>
+              )}
+            </div>
+          </FadeContent>
         </div>
 
         {/* Legend */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center', padding: '1rem 0' }}>
-          <TrustBadge status="VERIFIED" />
-          <TrustBadge status="LIVE" />
-          <TrustBadge status="COMMUNITY" />
-          <TrustBadge status="DISPUTED" />
-        </div>
+        <FadeContent delay={0.6}>
+          <div style={{ 
+            display: 'flex', 
+            flexWrap: 'wrap', 
+            gap: 'var(--space-3)', 
+            alignItems: 'center',
+            padding: 'var(--space-4)',
+            background: 'var(--color-surface)',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--color-border)',
+            boxShadow: 'var(--shadow-sm)'
+          }}>
+            <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-text-secondary)', marginRight: 'var(--space-2)' }}>
+              Confidence Legend:
+            </span>
+            <TrustBadge status="VERIFIED" />
+            <TrustBadge status="LIVE" />
+            <TrustBadge status="COMMUNITY" />
+            <TrustBadge status="DISPUTED" />
+          </div>
+        </FadeContent>
 
         {/* Results */}
         {itinerary && (
-          <div style={{ marginTop: '2rem' }}>
+          <div style={{ marginTop: 'var(--space-4)' }}>
             <ItineraryView items={itinerary} narration={narration} />
           </div>
         )}
