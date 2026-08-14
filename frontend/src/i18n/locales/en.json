@@ -1,49 +1,87 @@
 {
   "app": {
-    "name": "TravelTrust",
-    "tagline": "Your Trustworthy Travel Companion",
-    "description": "Plan trips with verified information you can trust"
+    "title": "MargDarshak",
+    "tagline": "Multilingual Trustworthy Travel Assistant",
+    "trustBadge": "100% Verifiable & Evidence-Backed"
   },
   "nav": {
     "home": "Home",
-    "plan": "Plan a Trip",
-    "myTrips": "My Trips",
-    "language": "Language",
-    "login": "Sign In",
-    "logout": "Sign Out"
+    "planner": "Itinerary Planner",
+    "attractions": "Explore Places",
+    "about": "Trust & Ethics"
+  },
+  "hero": {
+    "title": "Travel India with Absolute Trust",
+    "subtitle": "No hallucinated opening hours. No fake ticket prices. Verified by official tourism records, government registries, and live ground data.",
+    "ctaPrompt": "Where do you want to travel?",
+    "promptPlaceholder": "e.g., 2-day relaxed heritage tour of Bhubaneswar with wheelchair accessibility",
+    "startPlanning": "Generate Verified Plan",
+    "voicePrompt": "Speak your trip idea"
   },
   "trust": {
-    "verified": "Verified",
-    "verified_desc": "Confirmed by an official source",
-    "live": "Live",
-    "live_desc": "Real-time data from a live feed",
-    "community": "Community",
-    "community_desc": "Reported by community members",
-    "inferred": "AI Inferred",
-    "inferred_desc": "Estimated by AI — not independently verified",
-    "unverified": "Unverified",
-    "unverified_desc": "Not yet verified — confirm before visiting",
-    "outdated": "Outdated",
-    "outdated_desc": "Information may no longer be current",
-    "disputed": "Disputed",
-    "disputed_desc": "Conflicting sources — treat with caution",
-    "unknown": "Unknown ⚠ Not verified"
-  },
-  "common": {
-    "loading": "Loading...",
-    "error": "Something went wrong",
-    "retry": "Try Again",
-    "save": "Save",
-    "cancel": "Cancel",
-    "next": "Next",
-    "back": "Back",
-    "search": "Search",
-    "noResults": "No results found",
-    "source": "Source",
+    "title": "Provenance & Verification",
+    "status": {
+      "VERIFIED": "Official Verified",
+      "LIVE": "Real-time Live",
+      "COMMUNITY": "Community Verified",
+      "INFERRED": "Estimated / Inferred",
+      "UNVERIFIED": "Unverified",
+      "OUTDATED": "Outdated",
+      "DISPUTED": "Disputed"
+    },
+    "viewSource": "View Evidence Source",
     "lastChecked": "Last checked",
-    "viewDetails": "View Details",
-    "alternatives": "Alternatives Available",
-    "planTrip": "Plan a Trip",
-    "generate": "Generate Itinerary"
+    "confidence": "Confidence Score",
+    "reportDispute": "Report Inaccuracy",
+    "noFabrication": "Our AI never invents facts. Unverified hours or closures are strictly omitted."
+  },
+  "planner": {
+    "title": "Smart Itinerary Builder",
+    "destination": "Destination",
+    "selectDestination": "Select a city",
+    "startDate": "Start Date",
+    "days": "Duration (Days)",
+    "pace": "Travel Pace",
+    "paces": {
+      "RELAXED": "Relaxed (1-2 stops/day)",
+      "MODERATE": "Moderate (3 stops/day)",
+      "PACKED": "Packed (4-5 stops/day)"
+    },
+    "transport": "Transport Mode",
+    "transports": {
+      "WALKING": "Walking Friendly",
+      "PUBLIC_TRANSIT": "Public Transit",
+      "CAB": "Cab / Auto-rickshaw",
+      "OWN_VEHICLE": "Private Car",
+      "MIXED": "Optimized Mixed"
+    },
+    "accessibility": "Accessibility Requirements",
+    "wheelchairAccess": "Wheelchair Accessible Stops Only",
+    "interests": "Interests & Themes",
+    "generateBtn": "Generate Itinerary",
+    "generating": "Calculating routes & verifying hours...",
+    "day": "Day",
+    "travelBuffer": "min buffer / travel",
+    "excludedTitle": "Excluded Spots (Safety / Crowds / Hours)",
+    "whyExcluded": "Why was this excluded?",
+    "warnings": "Plan Advisory Notices",
+    "noPlanYet": "Select your destination and preferences to create a verified itinerary."
+  },
+  "feedback": {
+    "modalTitle": "Report Inaccurate or Outdated Information",
+    "entityLabel": "Reporting on",
+    "typeLabel": "Issue Type",
+    "inaccurate": "Inaccurate Information",
+    "outdated": "Outdated / Changed Hours or Prices",
+    "other": "Other Issue",
+    "commentPlaceholder": "Please provide details or corrected information...",
+    "submit": "Submit Dispute",
+    "submitting": "Submitting...",
+    "success": "Dispute reported successfully. Thank you for keeping data trustworthy!"
+  },
+  "weather": {
+    "liveAt": "Live Weather",
+    "condition": "Condition",
+    "temp": "Temp"
   }
 }

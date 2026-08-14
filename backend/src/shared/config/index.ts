@@ -4,20 +4,24 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// .env is at repo root: SIH/.env — config is at SIH/backend/src/shared/config/
+
+// Load .env from multiple potential locations (backend/.env, root/.env, current working dir)
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 const envSchema = z.object({
-  // Supabase
-  SUPABASE_URL: z.string().url(),
-  SUPABASE_ANON_KEY: z.string().min(1),
-  DATABASE_URL: z.string().startsWith('postgresql://'),
+  // Supabase / Database
+  SUPABASE_URL: z.string().url().default('https://mock-project.supabase.co'),
+  SUPABASE_ANON_KEY: z.string().min(1).default('mock-supabase-anon-key-dev'),
+  DATABASE_URL: z.string().startsWith('postgresql://').default('postgresql://postgres:postgres@localhost:5432/travel_assistant'),
 
   // LLM
-  GEMINI_API_KEY: z.string().min(1),
+  GEMINI_API_KEY: z.string().min(1).default('mock-gemini-api-key-dev'),
 
   // Routing
-  ROUTING_API_KEY: z.string().min(1),
+  ROUTING_API_KEY: z.string().min(1).default('mock-routing-api-key-dev'),
 
   // Auth
   JWT_SECRET: z.string().min(16),

@@ -1,6 +1,4 @@
-import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface FadeContentProps {
   children: React.ReactNode;
@@ -10,32 +8,52 @@ interface FadeContentProps {
   style?: React.CSSProperties;
 }
 
-export function FadeContent({ children, delay = 0, direction = 'up', className = '', style }: FadeContentProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+export function FadeContent({
+  children,
+  delay = 0,
+  direction = 'up',
+  className = '',
+  style,
+}: FadeContentProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
-  const getInitialY = () => {
-    if (direction === 'up') return 30;
-    if (direction === 'down') return -30;
-    return 0;
-  };
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setVisible(true), delay * 1000);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [delay]);
 
-  const getInitialX = () => {
-    if (direction === 'left') return 30;
-    if (direction === 'right') return -30;
-    return 0;
+  const translateMap: Record<string, string> = {
+    up: 'translateY(24px)',
+    down: 'translateY(-24px)',
+    left: 'translateX(24px)',
+    right: 'translateX(-24px)',
+    none: 'none',
   };
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y: getInitialY(), x: getInitialX() }}
-      animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
-      transition={{ duration: 0.5, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={className}
-      style={style}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'none' : translateMap[direction],
+        transition: `opacity 0.55s ease ${delay}s, transform 0.55s ease ${delay}s`,
+        ...style,
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

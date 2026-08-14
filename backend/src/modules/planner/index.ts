@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import { VerificationStatus } from '@prisma/client';
+import { VerificationStatus } from '../../shared/types/index.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../../shared/db/index.js';
