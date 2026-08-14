@@ -1,4 +1,14 @@
 import { useTranslation } from 'react-i18next';
+import { 
+  CheckCircle2, 
+  Activity, 
+  Users, 
+  Cpu, 
+  XCircle, 
+  Clock, 
+  AlertTriangle,
+  HelpCircle
+} from 'lucide-react';
 
 export type VerificationStatus = 
   | 'VERIFIED'
@@ -30,15 +40,16 @@ export function TrustBadge({ status }: TrustBadgeProps) {
   };
 
   const getIcon = (status: VerificationStatus) => {
+    const iconProps = { size: 14, strokeWidth: 2.5 };
     switch (status) {
-      case 'VERIFIED': return '🟢';
-      case 'LIVE': return '🔵';
-      case 'COMMUNITY': return '🟡';
-      case 'INFERRED': return '🟠';
-      case 'UNVERIFIED': return '🔴';
-      case 'OUTDATED': return '⏳';
-      case 'DISPUTED': return '⚠️';
-      default: return '❓';
+      case 'VERIFIED': return <CheckCircle2 {...iconProps} />;
+      case 'LIVE': return <Activity {...iconProps} />;
+      case 'COMMUNITY': return <Users {...iconProps} />;
+      case 'INFERRED': return <Cpu {...iconProps} />;
+      case 'UNVERIFIED': return <XCircle {...iconProps} />;
+      case 'OUTDATED': return <Clock {...iconProps} />;
+      case 'DISPUTED': return <AlertTriangle {...iconProps} />;
+      default: return <HelpCircle {...iconProps} />;
     }
   };
 
@@ -47,8 +58,8 @@ export function TrustBadge({ status }: TrustBadgeProps) {
 
   return (
     <span className={`trust-badge ${getBadgeStyle(status)}`} title={t(`${labelKey}_desc`, { defaultValue: '' })}>
-      <span style={{ marginRight: '0.25rem' }}>{getIcon(status)}</span>
-      {label}
+      {getIcon(status)}
+      <span>{label}</span>
     </span>
   );
 }
