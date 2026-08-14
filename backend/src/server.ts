@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { env } from './shared/config/index.js';
 import { errorHandler } from './shared/middleware/errorHandler.js';
+import { globalLimiter, strictLimiter } from './shared/middleware/rateLimiter.js';
+import { prisma } from './shared/db/index.js';
 
 const app = express();
 
@@ -10,14 +12,36 @@ const app = express();
 app.use(helmet());
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
+app.use(globalLimiter);
 
-// ─── Health Check ───────────────────────────────────────────────────────────
-app.get('/api/health', (_req, res) => {
-  res.json({
-    status: 'ok',
+// ─── Production Health Check ────────────────────────────────────────────────
+app.get('/api/health', async (_req, res) => {
+  const start = Date.now();
+  const checks: Record<string, { status: string; latency_ms?: number; error?: string }> = {};
+
+  // Database connectivity check
+  try {
+    const dbStart = Date.now();
+    await prisma.$queryRaw`SELECT 1`;
+    checks.database = { status: 'ok', latency_ms: Date.now() - dbStart };
+  } catch (err) {
+    checks.database = {
+      status: 'error',
+      error: 'Database connection failed',
+    };
+  }
+
+  const allOk = Object.values(checks).every((c) => c.status === 'ok');
+
+  res.status(allOk ? 200 : 503).json({
+    status: allOk ? 'healthy' : 'degraded',
     timestamp: new Date().toISOString(),
     environment: env.NODE_ENV,
     version: '1.0.0',
+    uptime_seconds: Math.floor(process.uptime()),
+    memory_mb: Math.round(process.memoryUsage().rss / 1024 / 1024),
+    checks,
+    response_time_ms: Date.now() - start,
   });
 });
 
@@ -28,19 +52,13 @@ import plannerRouter from './modules/planner/index.js';
 import nluRouter from './modules/nlu/index.js';
 import feedbackRouter from './modules/feedback/index.js';
 
-// ─── API v1 Routes (will be added per phase) ────────────────────────────────
+// ─── API v1 Routes ──────────────────────────────────────────────────────────
 app.use('/api/v1/knowledge', knowledgeRouter);
 app.use('/api/v1/attractions', attractionsRouter);
 app.use('/api/v1/live', liveDataRouter);
-app.use('/api/v1/planner', plannerRouter);
-app.use('/api/v1/nlu', nluRouter);
+app.use('/api/v1/planner', strictLimiter, plannerRouter);
+app.use('/api/v1/nlu', strictLimiter, nluRouter);
 app.use('/api/v1/feedback', feedbackRouter);
-// app.use('/api/v1/auth', authRouter);
-// app.use('/api/v1/users', usersRouter);
-// app.use('/api/v1/trips', tripsRouter);
-// app.use('/api/v1/nlu', nluRouter);
-// app.use('/api/v1/feedback', feedbackRouter);
-// app.use('/api/v1/i18n', i18nRouter);
 
 // ─── 404 Handler ────────────────────────────────────────────────────────────
 app.use((_req, res) => {
