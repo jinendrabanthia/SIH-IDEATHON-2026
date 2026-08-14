@@ -24,7 +24,9 @@ export async function getLiveWeather(lat: number, lon: number): Promise<WeatherD
       throw new Error(`Open-Meteo returned ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      current: { temperature_2m: number; is_day: number; weather_code: number };
+    };
     
     const weatherData: WeatherData = {
       temperature_celsius: data.current.temperature_2m,
