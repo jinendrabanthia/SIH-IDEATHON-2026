@@ -20,10 +20,10 @@ const plannerInputSchema = z.object({
   preferences: z.object({
     pace: z.enum(['RELAXED', 'MODERATE', 'PACKED']).default('MODERATE'),
     accessibilityWheelchair: z.boolean().default(false),
-    interests: z.array(z.string()).default([]),
+    interests: z.array(z.string().max(50)).max(20).default([]),
     transportPreference: z.enum(['WALKING', 'PUBLIC_TRANSIT', 'CAB', 'OWN_VEHICLE', 'MIXED']).default('MIXED'),
-  }),
-});
+  }).strict(),
+}).strict();
 
 type PlannerInput = z.infer<typeof plannerInputSchema>;
 type PlannerAttraction = Prisma.AttractionGetPayload<{
