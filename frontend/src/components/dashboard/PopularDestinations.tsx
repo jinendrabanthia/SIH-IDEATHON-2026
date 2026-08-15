@@ -142,21 +142,14 @@ export const PopularDestinations: React.FC<PopularDestinationsProps> = ({
                     el.style.background = 'linear-gradient(135deg, #fde68a, #fca5a5)';
                   }}
                 />
-                {/* Emoji badge top-right */}
-                <div className={`absolute top-2.5 right-2.5 w-8 h-8 ${dest.emojiBg} rounded-full flex items-center justify-center text-sm shadow-md`}>
-                  {dest.emoji}
-                </div>
+
               </div>
 
               {/* Info */}
               <div className="p-3">
                 <h3 className="font-bold text-gray-900 dark:text-white text-sm">{dest.name}</h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{dest.state}</p>
-                <div className="flex items-center gap-1 mt-2">
-                  <Star size={12} className="fill-yellow-400 text-yellow-400" />
-                  <span className="text-xs font-bold text-gray-900 dark:text-white">{dest.rating}</span>
-                  <span className="text-xs text-gray-400 dark:text-gray-500">({dest.reviews})</span>
-                </div>
+
               </div>
             </div>
           ))}

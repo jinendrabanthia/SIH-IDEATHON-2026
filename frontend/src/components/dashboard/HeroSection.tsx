@@ -35,7 +35,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
       {/* Hero Card */}
       <div className="rounded-2xl overflow-hidden shadow-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-colors">
         {/* Top part: text left + image right */}
-        <div className="flex" style={{ minHeight: '280px' }}>
+        <div className="flex" style={{ minHeight: '340px' }}>
           {/* Left — text pane */}
           <div
             className="flex flex-col justify-between p-8 bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] dark:from-gray-800 dark:to-gray-900"
@@ -43,12 +43,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
               width: '52%',
             }}
           >
-            {/* Badge */}
-            <div className="flex justify-end">
-              <span className="inline-flex items-center gap-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold px-3 py-1 rounded-full border border-green-200 dark:border-green-800/50">
-                🌄 {t('hero.badge', 'Incredible India')}
-              </span>
-            </div>
+
 
             {/* Title */}
             <div className="flex-1 flex flex-col justify-center">
