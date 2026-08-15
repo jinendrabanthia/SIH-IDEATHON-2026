@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 
 interface SplitTextProps {
   text: string;
@@ -9,50 +8,31 @@ interface SplitTextProps {
 }
 
 export function SplitText({ text, className = '', delay = 0, style }: SplitTextProps) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), delay * 1000 + 100);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
   const words = text.split(' ');
 
-  const container = {
-    hidden: { opacity: 0 },
-    visible: (i = 1) => ({
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: delay * i },
-    }),
-  };
-
-  const child = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring' as const,
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-    hidden: {
-      opacity: 0,
-      y: 20,
-      transition: {
-        type: 'spring' as const,
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-  };
-
   return (
-    <motion.div
-      style={{ overflow: 'hidden', display: 'flex', flexWrap: 'wrap', gap: '0.25em', ...style }}
-      variants={container}
-      initial="hidden"
-      animate="visible"
-      className={className}
-    >
-      {words.map((word, index) => (
-        <motion.span variants={child} key={index} style={{ display: 'inline-block' }}>
+    <span className={className} style={style} aria-label={text}>
+      {words.map((word, i) => (
+        <span
+          key={i}
+          style={{
+            display: 'inline-block',
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'none' : 'translateY(16px)',
+            transition: `opacity 0.45s ease ${delay + i * 0.06}s, transform 0.45s ease ${delay + i * 0.06}s`,
+            marginRight: i < words.length - 1 ? '0.25em' : 0,
+          }}
+        >
           {word}
-        </motion.span>
+        </span>
       ))}
-    </motion.div>
+    </span>
   );
 }
