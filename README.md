@@ -1,8 +1,8 @@
-# 🛡️ TravelShield: Multilingual Trustworthy Travel Assistant
+# 🛡️ MargDarshak: Multilingual Trustworthy Travel Assistant
 
-TravelShield is an AI-powered travel assistant designed for the **SIH Ideathon 2026**. It solves a critical problem with modern Generative AI: **hallucinations**. 
+MargDarshak is an AI-powered travel assistant designed for the **SIH Ideathon 2026**. It solves a critical problem with modern Generative AI: **hallucinations**. 
 
-Instead of relying on an LLM to guess opening hours, travel distances, or ticket prices, TravelShield uses a **Deterministic Planner Engine** coupled with a **Trust Validation Gate** to ensure that every single fact presented to the user is 100% verified and traceable.
+Instead of relying on an LLM to guess opening hours, travel distances, or ticket prices, MargDarshak uses a **Deterministic Planner Engine** coupled with a **Trust Validation Gate** to ensure that every single fact presented to the user is 100% verified and traceable.
 
 ## ✨ Key Features
 
