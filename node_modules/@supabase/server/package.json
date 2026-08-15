@@ -1,0 +1,182 @@
+{
+  "name": "@supabase/server",
+  "version": "1.4.1",
+  "description": "Server-side utilities for Supabase. Handles auth, client creation, and context injection so you write business logic, not boilerplate.",
+  "keywords": [
+    "edge",
+    "functions",
+    "supabase"
+  ],
+  "homepage": "https://github.com/supabase/server#readme",
+  "bugs": {
+    "url": "https://github.com/supabase/server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supabase/server.git"
+  },
+  "license": "MIT",
+  "author": "supabase",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./core": {
+      "import": {
+        "types": "./dist/core/index.d.mts",
+        "default": "./dist/core/index.mjs"
+      },
+      "require": {
+        "types": "./dist/core/index.d.cts",
+        "default": "./dist/core/index.cjs"
+      }
+    },
+    "./peer/supabase-js": {
+      "import": {
+        "types": "./dist/peer/supabase-js/index.d.mts",
+        "default": "./dist/peer/supabase-js/index.mjs"
+      },
+      "require": {
+        "types": "./dist/peer/supabase-js/index.d.cts",
+        "default": "./dist/peer/supabase-js/index.cjs"
+      }
+    },
+    "./adapters/hono": {
+      "import": {
+        "types": "./dist/adapters/hono/index.d.mts",
+        "default": "./dist/adapters/hono/index.mjs"
+      },
+      "require": {
+        "types": "./dist/adapters/hono/index.d.cts",
+        "default": "./dist/adapters/hono/index.cjs"
+      }
+    },
+    "./adapters/h3": {
+      "import": {
+        "types": "./dist/adapters/h3/index.d.mts",
+        "default": "./dist/adapters/h3/index.mjs"
+      },
+      "require": {
+        "types": "./dist/adapters/h3/index.d.cts",
+        "default": "./dist/adapters/h3/index.cjs"
+      }
+    },
+    "./adapters/elysia": {
+      "import": {
+        "types": "./dist/adapters/elysia/index.d.mts",
+        "default": "./dist/adapters/elysia/index.mjs"
+      },
+      "require": {
+        "types": "./dist/adapters/elysia/index.d.cts",
+        "default": "./dist/adapters/elysia/index.cjs"
+      }
+    },
+    "./adapters/nestjs": {
+      "import": {
+        "types": "./dist/adapters/nestjs/index.d.mts",
+        "default": "./dist/adapters/nestjs/index.mjs"
+      },
+      "require": {
+        "types": "./dist/adapters/nestjs/index.d.cts",
+        "default": "./dist/adapters/nestjs/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.cts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "docs",
+    "skills"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499",
+  "scripts": {
+    "build": "tsdown",
+    "check-exports": "attw --pack .",
+    "dev": "tsdown --watch",
+    "docs": "typedoc",
+    "format": "prettier --write .",
+    "gen:env": "bash e2e/scripts/gen-env.sh",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "prepare": "simple-git-hooks",
+    "smoke": "node scripts/smoke-load.mjs",
+    "test": "vitest run --project unit --project nestjs",
+    "test:e2e": "vitest run --project e2e",
+    "test:watch": "vitest --project unit --project nestjs",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p src/adapters/nestjs",
+    "typecheck:e2e": "tsc --noEmit -p e2e"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm pretty-quick --staged",
+    "commit-msg": "pnpm commitlint --edit \"$1\""
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "@supabase/supabase-js": "^2.0.0",
+    "elysia": "^1.4.0",
+    "h3": "^2.0.0",
+    "hono": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/common": {
+      "optional": true
+    },
+    "h3": {
+      "optional": true
+    },
+    "hono": {
+      "optional": true
+    },
+    "elysia": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.4",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "@nestjs/common": "^11.1.19",
+    "@nestjs/core": "^11.1.19",
+    "@nestjs/platform-express": "^11.1.19",
+    "@nestjs/platform-fastify": "^11.1.19",
+    "@nestjs/testing": "^11.1.19",
+    "@supabase/supabase-js": "^2.105.4",
+    "@swc/core": "^1.15.33",
+    "@types/node": "^26.0.1",
+    "@types/supertest": "^7.2.0",
+    "elysia": "^1.4.0",
+    "eslint": "^10.0.2",
+    "h3": "2.0.1-rc.20",
+    "hono": "^4.12.5",
+    "prettier": "3.8.1",
+    "pretty-quick": "^4.2.2",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "simple-git-hooks": "^2.13.1",
+    "srvx": "^0.11.18",
+    "supertest": "^7.2.2",
+    "tsdown": "^0.20.3",
+    "typedoc": "^0.28.19",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1",
+    "unplugin-swc": "^1.5.9",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "jose": "^6.2.0"
+  }
+}

@@ -1,0 +1,2 @@
+import { AuthError, AuthResponse, PostgrestError, PostgrestMaybeSingleResponse, PostgrestResponse, PostgrestSingleResponse, QueryData, QueryError, QueryResult, Session, SupabaseClient, SupabaseClientOptions, User, UserResponse } from "@supabase/supabase-js";
+export { type AuthError, type AuthResponse, type PostgrestError, type PostgrestMaybeSingleResponse, type PostgrestResponse, type PostgrestSingleResponse, type QueryData, type QueryError, type QueryResult, type Session, type SupabaseClient, type SupabaseClientOptions, type User, type UserResponse };

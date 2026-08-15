@@ -2,13 +2,36 @@
   "app": {
     "title": "MargDarshak",
     "tagline": "Multilingual Trustworthy Travel Assistant",
-    "trustBadge": "100% Verifiable & Evidence-Backed"
+    "trustBadge": "All data verified by Govt. & Official Sources",
+    "trustBadge100": "100% Verified"
   },
   "nav": {
-    "home": "Home",
-    "planner": "Itinerary Planner",
-    "attractions": "Explore Places",
-    "about": "Trust & Ethics"
+    "dashboard": "Dashboard",
+    "planTrip": "Plan Trip",
+    "exploreIndia": "Explore India",
+    "maps": "Maps",
+    "myTrips": "My Trips",
+    "favorites": "Favorites"
+  },
+  "dashboard": {
+    "searchPlaceholder": "Search destinations, places...",
+    "popularDestinations": "Popular Destinations",
+    "popularSubtitle": "Most loved places across India",
+    "viewAll": "View All",
+    "weather": "India Weather",
+    "liveConditions": "Live Conditions",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "aqi": "AQI",
+    "upcomingTrips": "Upcoming Trips",
+    "nextAdventures": "Your next adventures",
+    "viewAllTrips": "View All Trips",
+    "exploreRegion": "Explore India by Region",
+    "discoverDestinations": "Discover destinations across all states & UTs",
+    "destinations": "Destinations",
+    "exploreAllStates": "Explore All States",
+    "travelPulse": "India Travel Pulse",
+    "realTimeInsights": "Real-time travel insights"
   },
   "hero": {
     "title": "Travel India with Absolute Trust",
@@ -16,7 +39,21 @@
     "ctaPrompt": "Where do you want to travel?",
     "promptPlaceholder": "e.g., 2-day relaxed heritage tour of Bhubaneswar with wheelchair accessibility",
     "startPlanning": "Generate Verified Plan",
-    "voicePrompt": "Speak your trip idea"
+    "voicePrompt": "Speak your trip idea",
+    "badge": "Incredible India",
+    "exploreTitle": "Explore",
+    "exploreSubtitle": "Incredible",
+    "exploreCountry": "India",
+    "exploreDesc": "Discover verified places, smart itineraries and real-time travel insights across India.",
+    "searchPlaceholder": "Where do you want to explore?",
+    "verifiedPlaces": "Verified Places",
+    "trustedDesc": "100% Trusted",
+    "liveWeather": "Live Weather",
+    "weatherDesc": "Real-time Updates",
+    "accessible": "Accessible Travel",
+    "accessibleDesc": "Everyone Friendly",
+    "secureLabel": "Secure & Safe",
+    "secureDesc": "Govt. Verified"
   },
   "trust": {
     "title": "Provenance & Verification",
@@ -83,5 +120,8 @@
     "liveAt": "Live Weather",
     "condition": "Condition",
     "temp": "Temp"
+  },
+  "sidebar": {
+    "quickAccess": "Quick Access"
   }
 }

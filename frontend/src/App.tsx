@@ -1,9 +1,14 @@
 import React, { Component, ErrorInfo, ReactNode, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './i18n/config';
-import { Navbar } from './components/layout/Navbar';
-import { Footer } from './components/layout/Footer';
+import { DashboardPage } from './pages/DashboardPage';
+import { PlanTripPage } from './pages/PlanTripPage';
+import { ExploreIndia } from './pages/ExploreIndiaPage';
+import { MapsPage } from './pages/MapsPage';
+import { MyTripsPage } from './pages/MyTripsPage';
+import { FavoritesPage } from './pages/FavoritesPage';
+import { WeatherPage, NearbyPage, AccessibilityPage, TravelGuidePage, EmergencyPage } from './pages/PlaceholderPages';
 import { HomePage } from './pages/HomePage';
 import { PlannerPage } from './pages/PlannerPage';
 import { AttractionExplorerPage } from './pages/AttractionExplorerPage';
@@ -83,19 +88,23 @@ function App() {
           }
         >
           <BrowserRouter>
-            <div className="min-h-screen flex flex-col bg-slate-50">
-              <Navbar />
-              <main className="flex-1">
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/planner" element={<PlannerPage />} />
-                  <Route path="/explore" element={<AttractionExplorerPage />} />
-                  <Route path="/attractions" element={<AttractionExplorerPage />} />
-                  <Route path="*" element={<HomePage />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/plan-trip" element={<PlanTripPage />} />
+              <Route path="/explore" element={<ExploreIndia />} />
+              <Route path="/maps" element={<MapsPage />} />
+              <Route path="/my-trips" element={<MyTripsPage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/weather" element={<WeatherPage />} />
+              <Route path="/nearby" element={<NearbyPage />} />
+              <Route path="/accessibility" element={<AccessibilityPage />} />
+              <Route path="/travel-guide" element={<TravelGuidePage />} />
+              <Route path="/emergency" element={<EmergencyPage />} />
+              <Route path="/planner" element={<PlannerPage />} />
+              <Route path="/attractions" element={<AttractionExplorerPage />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
           </BrowserRouter>
         </Suspense>
       </QueryClientProvider>
