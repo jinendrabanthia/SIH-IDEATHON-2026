@@ -1,148 +1,201 @@
 import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { MainLayout } from '../components/layout/MainLayout';
-import { Calendar, MapPin, Users, Edit2, Trash2, Share2, CheckCircle } from 'lucide-react';
-
-interface SavedTrip {
-  id: string;
-  destination: string;
-  startDate: string;
-  endDate: string;
-  days: number;
-  travelers: number;
-  status: 'upcoming' | 'ongoing' | 'completed';
-  attractions: number;
-  budget: string;
-}
+import { Calendar, MapPin, Share2, Trash2, Lock, Unlock, CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react';
+import { tripsApi, Trip } from '../api/services/tripsApi';
+import { useAuth } from '../lib/AuthContext';
+import { AuthModal } from '../components/ui/AuthModal';
 
 export const MyTripsPage: React.FC = () => {
-  const [trips] = useState<SavedTrip[]>([
-    {
-      id: '1',
-      destination: 'Delhi → Jaipur',
-      startDate: '15 Aug 2026',
-      endDate: '20 Aug 2026',
-      days: 5,
-      travelers: 2,
-      status: 'upcoming',
-      attractions: 12,
-      budget: '₹25,000 - ₹35,000',
-    },
-    {
-      id: '2',
-      destination: 'Mumbai → Goa',
-      startDate: '24 May 2026',
-      endDate: '30 May 2026',
-      days: 6,
-      travelers: 4,
-      status: 'upcoming',
-      attractions: 15,
-      budget: '₹40,000 - ₹60,000',
-    },
-    {
-      id: '3',
-      destination: 'Kerala Backwaters',
-      startDate: '1 Jan 2026',
-      endDate: '8 Jan 2026',
-      days: 7,
-      travelers: 3,
-      status: 'completed',
-      attractions: 18,
-      budget: '₹35,000 - ₹50,000',
-    },
-  ]);
+  const { user, token } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const qc = useQueryClient();
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'upcoming':
-        return 'bg-blue-50 text-blue-600 border-blue-200';
-      case 'ongoing':
-        return 'bg-orange-50 text-orange-600 border-orange-200';
-      case 'completed':
-        return 'bg-green-50 text-green-600 border-green-200';
-      default:
-        return 'bg-gray-50 text-gray-600 border-gray-200';
-    }
+  // Fetch trips only when authenticated
+  const { data: trips = [], isLoading, error } = useQuery({
+    queryKey: ['trips', token],
+    queryFn: () => tripsApi.list(token!),
+    enabled: !!token,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => tripsApi.delete(id, token!),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['trips'] }),
+  });
+
+  const shareMutation = useMutation({
+    mutationFn: ({ id, isPublic }: { id: string; isPublic: boolean }) =>
+      tripsApi.setPublic(id, isPublic, token!),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['trips'] }),
+  });
+
+  const copyLink = async (trip: Trip) => {
+    if (!trip.shareToken) return;
+    const url = `${window.location.origin}/share/${trip.shareToken}`;
+    await navigator.clipboard.writeText(url);
+    setCopiedId(trip.id);
+    setTimeout(() => setCopiedId(null), 2000);
   };
+
+  const statusColor = (status: Trip['status']) => {
+    const map = {
+      DRAFT: 'bg-slate-100 text-slate-600 border-slate-200',
+      PLANNED: 'bg-blue-50 text-blue-600 border-blue-200',
+      ACTIVE: 'bg-orange-50 text-orange-600 border-orange-200',
+      COMPLETED: 'bg-green-50 text-green-600 border-green-200',
+    };
+    return map[status] || 'bg-gray-50 text-gray-600 border-gray-200';
+  };
+
+  // Not logged in
+  if (!user) {
+    return (
+      <MainLayout>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Trips</h1>
+            <p className="text-gray-600">Manage and view all your saved and completed trips.</p>
+          </div>
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl">🧭</div>
+            <h2 className="text-xl font-bold text-gray-800">Sign in to see your trips</h2>
+            <p className="text-gray-500 text-sm text-center max-w-xs">
+              Create an account to save itineraries, share trips with friends, and access them offline.
+            </p>
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="mt-2 px-6 py-3 rounded-xl font-semibold text-white transition-all"
+              style={{ background: 'linear-gradient(135deg, #f97316, #ea580c)' }}
+            >
+              Sign In / Register
+            </button>
+          </div>
+          <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Trips</h1>
-          <p className="text-gray-600">Manage and view all your saved and completed trips.</p>
+        <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Trips</h1>
+            <p className="text-gray-600">Logged in as <span className="font-semibold text-gray-800">{user.email}</span></p>
+          </div>
         </div>
+
+        {isLoading && (
+          <div className="flex items-center gap-3 py-12 justify-center text-gray-500">
+            <Loader2 className="animate-spin" size={20} />
+            Loading your trips…
+          </div>
+        )}
+
+        {error && (
+          <div className="flex items-center gap-2 p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm mb-4">
+            <AlertCircle size={16} />
+            Failed to load trips. Please try again.
+          </div>
+        )}
+
+        {!isLoading && trips.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-5xl mb-4">🗺️</div>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">No trips yet</h3>
+            <p className="text-gray-500 text-sm">Plan your first verified itinerary!</p>
+          </div>
+        )}
 
         <div className="space-y-4">
           {trips.map((trip) => (
             <div key={trip.id} className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300">
               <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-4">
-                    <h3 className="text-xl font-bold text-gray-900">{trip.destination}</h3>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold border ${getStatusColor(
-                        trip.status,
-                      )}`}
-                    >
-                      {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-3 flex-wrap">
+                    <Link to={`/trips/${trip.id}`} className="text-xl font-bold text-gray-900 truncate hover:text-orange-600 transition-colors">
+                      {trip.title}
+                    </Link>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${statusColor(trip.status)}`}>
+                      {trip.status}
                     </span>
+                    {trip.isPublic && (
+                      <span className="px-2 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-600 border border-purple-200">
+                        Public
+                      </span>
+                    )}
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
-                    <div>
-                      <p className="text-xs text-gray-600 font-semibold mb-1">START DATE</p>
-                      <p className="text-sm font-bold text-gray-900">{trip.startDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-600 font-semibold mb-1">DURATION</p>
-                      <p className="text-sm font-bold text-gray-900">{trip.days} Days</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-600 font-semibold mb-1">TRAVELERS</p>
-                      <p className="text-sm font-bold text-gray-900">{trip.travelers} People</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-600 font-semibold mb-1">ATTRACTIONS</p>
-                      <p className="text-sm font-bold text-gray-900">{trip.attractions} Places</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-600 font-semibold mb-1">BUDGET</p>
-                      <p className="text-sm font-bold text-gray-900">{trip.budget}</p>
-                    </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3 text-sm">
+                    <span className="flex items-center gap-1.5 text-gray-600">
+                      <MapPin size={14} className="text-orange-500" />
+                      {trip.destination?.name}
+                      {trip.destination?.region ? `, ${trip.destination.region}` : ''}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-gray-600">
+                      <Calendar size={14} className="text-orange-500" />
+                      {new Date(trip.startDate).toLocaleDateString()} – {new Date(trip.endDate).toLocaleDateString()}
+                    </span>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium">
-                      <CheckCircle size={14} />
-                      Verified Itinerary
-                    </span>
-                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs font-medium">
-                      Accessibility Audited
-                    </span>
+                    {trip.hasSnapshot && (
+                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium">
+                        <CheckCircle size={12} />
+                        Saved Itinerary
+                      </span>
+                    )}
                   </div>
+
+                  {/* Share link */}
+                  {trip.isPublic && trip.shareToken && (
+                    <div className="mt-3 flex items-center gap-2 p-2 rounded-lg bg-purple-50 border border-purple-200">
+                      <span className="text-xs text-purple-700 font-mono truncate flex-1">
+                        {window.location.origin}/share/{trip.shareToken}
+                      </span>
+                      <button
+                        onClick={() => copyLink(trip)}
+                        className="shrink-0 flex items-center gap-1 text-xs font-semibold text-purple-600 hover:text-purple-800 transition-colors"
+                      >
+                        {copiedId === trip.id ? <Check size={14} /> : <Copy size={14} />}
+                        {copiedId === trip.id ? 'Copied!' : 'Copy'}
+                      </button>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
-                    <Edit2 size={18} className="text-gray-600" />
+                {/* Actions */}
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    title={trip.isPublic ? 'Make private' : 'Share publicly'}
+                    onClick={() => shareMutation.mutate({ id: trip.id, isPublic: !trip.isPublic })}
+                    disabled={shareMutation.isPending}
+                    className="p-2 rounded-lg transition-colors hover:bg-purple-50"
+                  >
+                    {trip.isPublic
+                      ? <Unlock size={17} className="text-purple-600" />
+                      : <Share2 size={17} className="text-gray-500" />
+                    }
                   </button>
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Share">
-                    <Share2 size={18} className="text-gray-600" />
-                  </button>
-                  <button className="p-2 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
-                    <Trash2 size={18} className="text-red-600" />
+                  <button
+                    title="Delete trip"
+                    onClick={() => {
+                      if (window.confirm('Delete this trip? This cannot be undone.')) {
+                        deleteMutation.mutate(trip.id);
+                      }
+                    }}
+                    disabled={deleteMutation.isPending}
+                    className="p-2 rounded-lg transition-colors hover:bg-red-50"
+                  >
+                    <Trash2 size={17} className="text-red-500" />
                   </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
-        {trips.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No trips yet. Start planning your next adventure!</p>
-          </div>
-        )}
       </div>
     </MainLayout>
   );
