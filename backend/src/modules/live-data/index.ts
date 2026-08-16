@@ -9,7 +9,7 @@ const router = Router();
 const coordSchema = z.object({
   lat: z.coerce.number().min(-90).max(90),
   lon: z.coerce.number().min(-180).max(180),
-});
+}).strict();
 
 const routeSchema = z.object({
   startLat: z.coerce.number().min(-90).max(90),
@@ -17,7 +17,7 @@ const routeSchema = z.object({
   endLat: z.coerce.number().min(-90).max(90),
   endLon: z.coerce.number().min(-180).max(180),
   profile: z.enum(['driving-car', 'foot-walking']).default('driving-car'),
-});
+}).strict();
 
 router.get('/weather', async (req, res, next) => {
   try {

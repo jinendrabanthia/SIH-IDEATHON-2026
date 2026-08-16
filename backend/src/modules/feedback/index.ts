@@ -4,6 +4,7 @@ import { prisma } from '../../shared/db/index.js';
 import { AppError } from '../../shared/middleware/errorHandler.js';
 import { feedbackLimiter } from '../../shared/middleware/rateLimiter.js';
 import { requireAuth } from '../../shared/middleware/auth.js';
+import { sanitizeBody } from '../../shared/middleware/sanitize.js';
 
 const router = Router();
 
@@ -14,8 +15,8 @@ const feedbackSchema = z.object({
   comment: z.string().max(500).optional(),
 }).strict();
 
-// Rate limit + auth on feedback submissions
-router.post('/', feedbackLimiter, requireAuth, async (req, res, next) => {
+// Rate limit + auth + XSS sanitization on feedback submissions
+router.post('/', feedbackLimiter, requireAuth, sanitizeBody, async (req, res, next) => {
   try {
     const { entityId, entityType, feedbackType, comment } = feedbackSchema.parse(req.body);
 
