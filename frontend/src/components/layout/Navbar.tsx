@@ -71,6 +71,16 @@ export const Navbar: React.FC = () => {
           >
             {t('nav.attractions')}
           </Link>
+          <Link
+            to="/analytics"
+            className={`px-4 py-2 text-sm font-semibold rounded-xl transition-colors ${
+              location.pathname === '/analytics'
+                ? 'bg-orange-50 text-orange-700'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            Analytics
+          </Link>
         </nav>
 
         {/* Language Switcher & Actions */}

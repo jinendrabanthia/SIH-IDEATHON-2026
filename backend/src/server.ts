@@ -1,17 +1,32 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { env } from './shared/config/index.js';
 import { errorHandler } from './shared/middleware/errorHandler.js';
-import { globalLimiter, strictLimiter } from './shared/middleware/rateLimiter.js';
+import { globalLimiter, strictLimiter, authLimiter } from './shared/middleware/rateLimiter.js';
 import { prisma } from './shared/db/index.js';
 
 const app = express();
 
 // ─── Security & Parsing ─────────────────────────────────────────────────────
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      connectSrc: ["'self'", env.CORS_ORIGIN],
+      fontSrc: ["'self'", 'https:', 'data:'],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+}));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
+app.use(cookieParser());
 app.use(globalLimiter);
 
 // ─── Production Health Check ────────────────────────────────────────────────
@@ -51,14 +66,24 @@ import liveDataRouter from './modules/live-data/index.js';
 import plannerRouter from './modules/planner/index.js';
 import nluRouter from './modules/nlu/index.js';
 import feedbackRouter from './modules/feedback/index.js';
+import authRouter from './modules/auth/index.js';
+import favoritesRouter from './modules/favorites/index.js';
+import tripsRouter from './modules/trips/index.js';
+import servicesRouter from './modules/services/index.js';
+import analyticsRouter from './modules/analytics/index.js';
 
 // ─── API v1 Routes ──────────────────────────────────────────────────────────
+app.use('/api/v1/auth', authLimiter, authRouter);
 app.use('/api/v1/knowledge', knowledgeRouter);
 app.use('/api/v1/attractions', attractionsRouter);
 app.use('/api/v1/live', liveDataRouter);
 app.use('/api/v1/planner', strictLimiter, plannerRouter);
 app.use('/api/v1/nlu', strictLimiter, nluRouter);
 app.use('/api/v1/feedback', feedbackRouter);
+app.use('/api/v1/favorites', favoritesRouter);
+app.use('/api/v1/trips', tripsRouter);
+app.use('/api/v1/services', servicesRouter);
+app.use('/api/v1/analytics', analyticsRouter);
 
 // ─── 404 Handler ────────────────────────────────────────────────────────────
 app.use((_req, res) => {

@@ -2,6 +2,7 @@ import React, { Component, ErrorInfo, ReactNode, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './i18n/config';
+import { AuthProvider } from './lib/AuthContext';
 import { DashboardPage } from './pages/DashboardPage';
 import { PlanTripPage } from './pages/PlanTripPage';
 import { ExploreIndia } from './pages/ExploreIndiaPage';
@@ -12,6 +13,9 @@ import { WeatherPage, NearbyPage, AccessibilityPage, TravelGuidePage, EmergencyP
 import { HomePage } from './pages/HomePage';
 import { PlannerPage } from './pages/PlannerPage';
 import { AttractionExplorerPage } from './pages/AttractionExplorerPage';
+import { SharedTripPage } from './pages/SharedTripPage';
+import { TripDetailsPage } from './pages/TripDetailsPage';
+import { AnalyticsPage } from './pages/AnalyticsPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -78,35 +82,40 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <Suspense
-          fallback={
-            <div className="min-h-screen flex items-center justify-center bg-slate-50">
-              <div className="text-slate-600 font-medium animate-pulse text-sm">
-                Loading MargDarshak...
+        <AuthProvider>
+          <Suspense
+            fallback={
+              <div className="min-h-screen flex items-center justify-center bg-slate-50">
+                <div className="text-slate-600 font-medium animate-pulse text-sm">
+                  Loading MargDarshak...
+                </div>
               </div>
-            </div>
-          }
-        >
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/plan-trip" element={<PlanTripPage />} />
-              <Route path="/explore" element={<ExploreIndia />} />
-              <Route path="/maps" element={<MapsPage />} />
-              <Route path="/my-trips" element={<MyTripsPage />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/weather" element={<WeatherPage />} />
-              <Route path="/nearby" element={<NearbyPage />} />
-              <Route path="/accessibility" element={<AccessibilityPage />} />
-              <Route path="/travel-guide" element={<TravelGuidePage />} />
-              <Route path="/emergency" element={<EmergencyPage />} />
-              <Route path="/planner" element={<PlannerPage />} />
-              <Route path="/attractions" element={<AttractionExplorerPage />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
-          </BrowserRouter>
-        </Suspense>
+            }
+          >
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/plan-trip" element={<PlanTripPage />} />
+                <Route path="/explore" element={<ExploreIndia />} />
+                <Route path="/maps" element={<MapsPage />} />
+                <Route path="/my-trips" element={<MyTripsPage />} />
+                <Route path="/favorites" element={<FavoritesPage />} />
+                <Route path="/weather" element={<WeatherPage />} />
+                <Route path="/nearby" element={<NearbyPage />} />
+                <Route path="/accessibility" element={<AccessibilityPage />} />
+                <Route path="/travel-guide" element={<TravelGuidePage />} />
+                <Route path="/emergency" element={<EmergencyPage />} />
+                <Route path="/planner" element={<PlannerPage />} />
+                <Route path="/attractions" element={<AttractionExplorerPage />} />
+                <Route path="/share/:token" element={<SharedTripPage />} />
+                <Route path="/trips/:id" element={<TripDetailsPage />} />
+                <Route path="/analytics" element={<AnalyticsPage />} />
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+            </BrowserRouter>
+          </Suspense>
+        </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
