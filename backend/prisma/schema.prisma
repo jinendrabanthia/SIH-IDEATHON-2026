@@ -103,9 +103,11 @@ model User {
   createdAt         DateTime  @default(now()) @map("created_at")
   updatedAt         DateTime  @updatedAt @map("updated_at")
 
-  preferences UserPreference?
-  trips       Trip[]
-  feedback    Feedback[]
+  preferences    UserPreference?
+  trips          Trip[]
+  feedback       Feedback[]
+  refreshTokens  RefreshToken[]
+  favorites      Favorite[]
 
   @@map("users")
 }
@@ -174,6 +176,7 @@ model Attraction {
   crowdRecords     CrowdCapacityRecord[]
   sensitivityFlags SensitivityFlag[]
   itineraryItems   ItineraryItem[]
+  favorites        Favorite[]
 
   @@map("attractions")
 }
@@ -291,13 +294,18 @@ model LocalBusiness {
 // ─── Trips & Itineraries ────────────────────────────────────────────────────
 
 model Trip {
-  id            String     @id @default(uuid())
-  userId        String     @map("user_id")
-  destinationId String     @map("destination_id")
-  startDate     DateTime   @map("start_date")
-  endDate       DateTime   @map("end_date")
-  status        TripStatus @default(DRAFT)
-  createdAt     DateTime   @default(now()) @map("created_at")
+  id                  String     @id @default(uuid())
+  userId              String     @map("user_id")
+  destinationId       String     @map("destination_id")
+  title               String     @default("My Trip")
+  startDate           DateTime   @map("start_date")
+  endDate             DateTime   @map("end_date")
+  status              TripStatus @default(DRAFT)
+  itinerarySnapshot   Json?      @map("itinerary_snapshot")   // frozen snapshot of last generated itinerary
+  isPublic            Boolean    @default(false) @map("is_public")
+  shareToken          String?    @unique @map("share_token")  // crypto-random, set when is_public=true
+  createdAt           DateTime   @default(now()) @map("created_at")
+  updatedAt           DateTime   @updatedAt @map("updated_at")
 
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   destination Destination @relation(fields: [destinationId], references: [id])
@@ -354,4 +362,33 @@ model Feedback {
   fact Fact @relation(fields: [factId], references: [id])
 
   @@map("feedback")
+}
+
+// ─── Refresh Tokens ─────────────────────────────────────────────────────────
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  tokenHash String   @unique @map("token_hash")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+// ─── Favorites ──────────────────────────────────────────────────────────────
+
+model Favorite {
+  id           String     @id @default(uuid())
+  userId       String     @map("user_id")
+  attractionId String     @map("attraction_id")
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attraction Attraction @relation(fields: [attractionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, attractionId])
+  @@map("favorites")
 }
