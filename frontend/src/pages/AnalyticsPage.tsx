@@ -7,7 +7,7 @@ export const AnalyticsPage: React.FC = () => {
   const { data: metrics, isLoading, error } = useQuery({
     queryKey: ['analytics-dashboard'],
     queryFn: async () => {
-      const res = await fetch(`${env.API_URL}/v1/analytics/dashboard`);
+      const res = await fetch(`${env.API_URL}/analytics/dashboard`);
       if (!res.ok) throw new Error('Failed to fetch analytics');
       const json = await res.json();
       return json.data;

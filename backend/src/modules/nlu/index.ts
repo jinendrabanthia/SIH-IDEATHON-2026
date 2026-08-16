@@ -1,21 +1,15 @@
 import { Router } from 'express';
 import { z } from 'zod';
+import { env } from '../../shared/config/index.js';
 import { AppError } from '../../shared/middleware/errorHandler.js';
 import { validateLLMNarration } from '../trust-validation/index.js';
 import { sanitizeBody } from '../../shared/middleware/sanitize.js';
 
 const router = Router();
 
-// Schema for raw text extraction
-const extractSchema = z.object({
-  prompt: z.string().min(5).max(1000),
-}).strict();
-
-/**
- * Wraps user input with explicit delimiters for prompt injection defense.
- * When the mock is replaced with a real LLM call, this ensures the model
- * treats user text as passive data, not as instructions.
- */
+// ─── Prompt Sandbox ──────────────────────────────────────────────────────────
+// Wraps user input in explicit delimiters to mitigate prompt injection.
+// The LLM is instructed to treat content between tags as passive data only.
 function sandboxUserInput(rawInput: string): string {
   return [
     '<user_input_start>',
@@ -27,33 +21,79 @@ function sandboxUserInput(rawInput: string): string {
   ].join('\n');
 }
 
-router.post('/extract', sanitizeBody, async (req, res, next) => {
-  try {
-    const { prompt } = extractSchema.parse(req.body);
+// ─── Gemini API Helper ───────────────────────────────────────────────────────
+// Calls the Gemini REST API directly (no SDK dependency needed).
+async function callGemini(systemInstruction: string, userContent: string): Promise<string> {
+  const GEMINI_MODEL = 'gemini-2.0-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${env.GEMINI_API_KEY}`;
 
-    // Sandbox the prompt for LLM safety (defense-in-depth for when mock is replaced)
-    const sandboxedPrompt = sandboxUserInput(prompt);
-    console.log(`Mock NLU extracting from sandboxed prompt (${sandboxedPrompt.length} chars)`);
-    
-    // Very simple keyword matching for the mock
-    const p = prompt.toLowerCase();
-    
-    const parsed = {
-      pace: p.includes('relaxed') ? 'RELAXED' : p.includes('packed') ? 'PACKED' : 'MODERATE',
-      transportPreference: p.includes('car') || p.includes('drive') ? 'OWN_VEHICLE' : p.includes('walk') ? 'WALKING' : 'MIXED',
-      groupType: p.includes('family') ? 'FAMILY' : p.includes('couple') ? 'COUPLE' : 'SOLO',
-      accessibilityWheelchair: p.includes('wheelchair') || p.includes('access'),
-      interests: p.includes('history') ? ['history'] : [],
-    };
+  const body = {
+    system_instruction: {
+      parts: [{ text: systemInstruction }],
+    },
+    contents: [
+      {
+        role: 'user',
+        parts: [{ text: userContent }],
+      },
+    ],
+    generationConfig: {
+      temperature: 0.2,       // Low temp for structured extraction
+      maxOutputTokens: 1024,
+      responseMimeType: 'application/json',
+    },
+    safetySettings: [
+      { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+    ],
+  };
 
-    res.json({ data: parsed });
-  } catch (err) {
-    console.error('NLU Extract Error:', err);
-    next(new AppError('Failed to extract preferences from text', 500, 'NLU_ERROR'));
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Gemini API error ${response.status}: ${errText}`);
   }
-});
 
-// Schema for narrative generation
+  const data = await response.json() as {
+    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+  };
+
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Gemini returned empty response');
+  return text;
+}
+
+// ─── Fallback: keyword-based extraction (if Gemini unavailable) ──────────────
+function keywordExtract(prompt: string) {
+  const p = prompt.toLowerCase();
+  return {
+    pace: p.includes('relaxed') ? 'RELAXED' : p.includes('packed') || p.includes('busy') ? 'PACKED' : 'MODERATE',
+    transportPreference: p.includes('car') || p.includes('drive') || p.includes('vehicle')
+      ? 'OWN_VEHICLE' : p.includes('walk') ? 'WALKING' : p.includes('cab') || p.includes('taxi') ? 'CAB' : 'MIXED',
+    groupType: p.includes('family') ? 'FAMILY' : p.includes('couple') || p.includes('partner') ? 'COUPLE' : p.includes('group') || p.includes('friends') ? 'GROUP' : 'SOLO',
+    accessibilityWheelchair: p.includes('wheelchair') || p.includes('accessibility') || p.includes('disabled'),
+    interests: [
+      p.includes('history') || p.includes('heritage') ? 'Heritage' : null,
+      p.includes('spiritual') || p.includes('temple') || p.includes('religious') ? 'Spiritual' : null,
+      p.includes('nature') || p.includes('park') || p.includes('wildlife') ? 'Nature & Parks' : null,
+      p.includes('food') || p.includes('market') || p.includes('cuisine') ? 'Local Food & Markets' : null,
+      p.includes('art') || p.includes('craft') || p.includes('handicraft') ? 'Handicrafts & Art' : null,
+      p.includes('museum') || p.includes('culture') ? 'Museums & Culture' : null,
+    ].filter(Boolean) as string[],
+  };
+}
+
+// ─── Schema Validation ───────────────────────────────────────────────────────
+
+const extractSchema = z.object({
+  prompt: z.string().min(5).max(1000),
+}).strict();
+
 const narrateSchema = z.object({
   itinerary: z.array(z.object({
     attractionName: z.string().max(200),
@@ -65,27 +105,112 @@ const narrateSchema = z.object({
   validFactIds: z.array(z.string().uuid()).max(100),
 }).strict();
 
+// ─── POST /nlu/extract ───────────────────────────────────────────────────────
+// Extracts structured travel preferences from free-form natural language text.
+router.post('/extract', sanitizeBody, async (req, res, next) => {
+  try {
+    const { prompt } = extractSchema.parse(req.body);
+    const sandboxedPrompt = sandboxUserInput(prompt);
+
+    let parsed: ReturnType<typeof keywordExtract>;
+    let usedFallback = false;
+
+    try {
+      const systemInstruction = `You are a travel preference extraction engine. 
+Extract structured preferences from the user's travel description text.
+Return ONLY a valid JSON object with these exact keys:
+- pace: one of "RELAXED" | "MODERATE" | "PACKED"
+- transportPreference: one of "WALKING" | "PUBLIC_TRANSIT" | "CAB" | "OWN_VEHICLE" | "MIXED"
+- groupType: one of "SOLO" | "COUPLE" | "FAMILY" | "GROUP"
+- accessibilityWheelchair: boolean (true if user mentions wheelchair, accessibility needs, or disability)
+- interests: array of strings from: ["Heritage", "Spiritual", "Nature & Parks", "Local Food & Markets", "Handicrafts & Art", "Museums & Culture", "Architecture", "History", "Culture", "Family"]
+
+Respond with ONLY the JSON object, no explanation, no markdown, no code fences.`;
+
+      const raw = await callGemini(systemInstruction, sandboxedPrompt);
+      // Strip any accidental markdown fences Gemini might add
+      const cleaned = raw.replace(/```json\n?|\n?```/g, '').trim();
+      const geminiResult = JSON.parse(cleaned);
+
+      // Validate that the response has the expected shape
+      parsed = {
+        pace: ['RELAXED', 'MODERATE', 'PACKED'].includes(geminiResult.pace) ? geminiResult.pace : 'MODERATE',
+        transportPreference: ['WALKING', 'PUBLIC_TRANSIT', 'CAB', 'OWN_VEHICLE', 'MIXED'].includes(geminiResult.transportPreference)
+          ? geminiResult.transportPreference : 'MIXED',
+        groupType: ['SOLO', 'COUPLE', 'FAMILY', 'GROUP'].includes(geminiResult.groupType) ? geminiResult.groupType : 'SOLO',
+        accessibilityWheelchair: Boolean(geminiResult.accessibilityWheelchair),
+        interests: Array.isArray(geminiResult.interests) ? geminiResult.interests.slice(0, 10) : [],
+      };
+    } catch (geminiError) {
+      console.warn('[NLU] Gemini extraction failed, falling back to keyword matching:', (geminiError as Error).message);
+      parsed = keywordExtract(prompt);
+      usedFallback = true;
+    }
+
+    res.json({
+      data: parsed,
+      ...(usedFallback && { meta: { fallback_used: true, reason: 'Gemini API unavailable' } }),
+    });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      res.status(400).json({
+        error: { code: 'VALIDATION_ERROR', message: 'Invalid request', details: err.flatten().fieldErrors },
+      });
+      return;
+    }
+    next(new AppError('Failed to extract preferences from text', 500, 'NLU_ERROR'));
+  }
+});
+
+// ─── POST /nlu/narrate ───────────────────────────────────────────────────────
+// Generates a warm, engaging travel narrative for an itinerary via Gemini.
+// All output passes through the Trust Validation Gate before returning.
 router.post('/narrate', sanitizeBody, async (req, res, next) => {
   try {
     const { itinerary, validFactIds } = narrateSchema.parse(req.body);
 
-    console.log(`Mock NLU narrating itinerary of ${itinerary.length} items`);
-    
-    // Mock the LLM narration
-    let rawNarration = "Here is your wonderful itinerary! ";
-    itinerary.forEach((item) => {
-      rawNarration += `You will visit ${item.attractionName} from ${item.startTime} to ${item.endTime}. `;
-      if (item.factId) {
-        rawNarration += `[fact:${item.factId}] `;
-      }
-    });
-    
-    // Pass through Trust Validation Gate
+    let rawNarration: string;
+    let usedFallback = false;
+
+    try {
+      const systemInstruction = `You are a friendly, knowledgeable Indian travel guide writing a warm narration for a traveller's itinerary.
+Write in a conversational, enthusiastic tone. Be specific about each place.
+When referencing a verified fact (opening hours, ticket price, accessibility), include its fact marker in the format [fact:UUID].
+Keep the narration concise — 2-4 sentences per attraction.
+Do NOT invent facts not present in the itinerary data. Do NOT use markdown.`;
+
+      const itineraryText = itinerary.map((item) =>
+        `- ${item.attractionName} (${item.startTime}–${item.endTime})${item.description ? `: ${item.description}` : ''}${item.factId ? ` [fact:${item.factId}]` : ''}`
+      ).join('\n');
+
+      const userContent = `Generate a travel narration for this itinerary:\n${itineraryText}`;
+
+      rawNarration = await callGemini(systemInstruction, userContent);
+    } catch (geminiError) {
+      console.warn('[NLU] Gemini narration failed, using template fallback:', (geminiError as Error).message);
+      // Template-based fallback
+      rawNarration = "Here is your wonderful itinerary! ";
+      itinerary.forEach((item) => {
+        rawNarration += `You will visit ${item.attractionName} from ${item.startTime} to ${item.endTime}. `;
+        if (item.factId) rawNarration += `[fact:${item.factId}] `;
+      });
+      usedFallback = true;
+    }
+
+    // Trust Validation Gate — strips hallucinated [fact:id] references
     const validatedNarration = validateLLMNarration(rawNarration, validFactIds);
 
-    res.json({ data: { narration: validatedNarration } });
+    res.json({
+      data: { narration: validatedNarration },
+      ...(usedFallback && { meta: { fallback_used: true, reason: 'Gemini API unavailable' } }),
+    });
   } catch (err) {
-    console.error('NLU Narrate Error:', err);
+    if (err instanceof z.ZodError) {
+      res.status(400).json({
+        error: { code: 'VALIDATION_ERROR', message: 'Invalid request', details: err.flatten().fieldErrors },
+      });
+      return;
+    }
     next(new AppError('Failed to generate narration', 500, 'NLU_ERROR'));
   }
 });

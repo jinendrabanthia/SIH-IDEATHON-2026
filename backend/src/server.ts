@@ -67,6 +67,7 @@ import plannerRouter from './modules/planner/index.js';
 import nluRouter from './modules/nlu/index.js';
 import feedbackRouter from './modules/feedback/index.js';
 import authRouter from './modules/auth/index.js';
+import usersRouter from './modules/users/index.js';
 import favoritesRouter from './modules/favorites/index.js';
 import tripsRouter from './modules/trips/index.js';
 import servicesRouter from './modules/services/index.js';
@@ -74,6 +75,7 @@ import analyticsRouter from './modules/analytics/index.js';
 
 // ─── API v1 Routes ──────────────────────────────────────────────────────────
 app.use('/api/v1/auth', authLimiter, authRouter);
+app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/knowledge', knowledgeRouter);
 app.use('/api/v1/attractions', attractionsRouter);
 app.use('/api/v1/live', liveDataRouter);

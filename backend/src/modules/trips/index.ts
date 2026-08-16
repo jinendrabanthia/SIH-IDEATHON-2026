@@ -11,7 +11,7 @@ const router = Router();
 // ─── Schemas ────────────────────────────────────────────────────────────────
 
 const createTripSchema = z.object({
-  destinationId: z.string().uuid(),
+  destinationId: z.string().min(1).max(100), // supports both UUID and slug IDs
   title: z.string().min(1).max(200).default('My Trip'),
   startDate: z.string().datetime(),
   endDate: z.string().datetime(),

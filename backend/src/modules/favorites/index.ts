@@ -10,11 +10,11 @@ const router = Router();
 router.use(requireAuth);
 
 const addFavoriteSchema = z.object({
-  attractionId: z.string().uuid(),
+  attractionId: z.string().min(1).max(100), // supports both UUID and slug IDs
 }).strict();
 
 const paramSchema = z.object({
-  attractionId: z.string().uuid(),
+  attractionId: z.string().min(1).max(100), // supports both UUID and slug IDs
 }).strict();
 
 // GET /api/v1/favorites — list user's favorites

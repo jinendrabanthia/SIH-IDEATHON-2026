@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { MainLayout } from '../components/layout/MainLayout';
 import { Calendar, MapPin, Share2, Trash2, Lock, Unlock, CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react';
 import { tripsApi, Trip } from '../api/services/tripsApi';
