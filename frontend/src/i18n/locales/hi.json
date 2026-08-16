@@ -2,13 +2,36 @@
   "app": {
     "title": "मार्गदर्शक (MargDarshak)",
     "tagline": "बहुभाषी विश्वसनीय यात्रा सहायक",
-    "trustBadge": "100% सत्यापित एवं साक्ष्य-आधारित"
+    "trustBadge": "सभी डेटा सरकार और आधिकारिक स्रोतों द्वारा सत्यापित",
+    "trustBadge100": "100% सत्यापित"
   },
   "nav": {
-    "home": "होम",
-    "planner": "यात्रा योजनाकार",
-    "attractions": "स्थान देखें",
-    "about": "विश्वसनीयता एवं नीति"
+    "dashboard": "डैशबोर्ड",
+    "planTrip": "यात्रा योजना",
+    "exploreIndia": "भारत भ्रमण",
+    "maps": "नक्शे",
+    "myTrips": "मेरी यात्राएं",
+    "favorites": "पसंदीदा"
+  },
+  "dashboard": {
+    "searchPlaceholder": "गंतव्य, स्थान खोजें...",
+    "popularDestinations": "लोकप्रिय गंतव्य",
+    "popularSubtitle": "भारत भर में सबसे पसंदीदा स्थान",
+    "viewAll": "सभी देखें",
+    "weather": "भारत का मौसम",
+    "liveConditions": "लाइव स्थिति",
+    "humidity": "नमी",
+    "wind": "हवा",
+    "aqi": "AQI",
+    "upcomingTrips": "आगामी यात्राएं",
+    "nextAdventures": "आपके अगले रोमांच",
+    "viewAllTrips": "सभी यात्राएं देखें",
+    "exploreRegion": "क्षेत्र के अनुसार भारत भ्रमण",
+    "discoverDestinations": "सभी राज्यों और केंद्र शासित प्रदेशों में गंतव्य खोजें",
+    "destinations": "गंतव्य",
+    "exploreAllStates": "सभी राज्य देखें",
+    "travelPulse": "भारत यात्रा पल्स",
+    "realTimeInsights": "वास्तविक समय यात्रा जानकारी"
   },
   "hero": {
     "title": "पूर्ण विश्वास के साथ भारत का भ्रमण करें",
@@ -16,7 +39,21 @@
     "ctaPrompt": "आप कहाँ यात्रा करना चाहते हैं?",
     "promptPlaceholder": "उदा: भुवनेश्वर की 2 दिवसीय शांत विरासत यात्रा (व्हीलचेयर सुलभता सहित)",
     "startPlanning": "सत्यापित योजना बनाएं",
-    "voicePrompt": "अपनी यात्रा योजना बोलें"
+    "voicePrompt": "अपनी यात्रा योजना बोलें",
+    "badge": "अतुल्य भारत",
+    "exploreTitle": "खोजें",
+    "exploreSubtitle": "अतुल्य",
+    "exploreCountry": "भारत",
+    "exploreDesc": "भारत भर में सत्यापित स्थान, स्मार्ट यात्रा योजनाएं और रियल-टाइम जानकारी खोजें।",
+    "searchPlaceholder": "आप कहाँ जाना चाहते हैं?",
+    "verifiedPlaces": "सत्यापित स्थान",
+    "trustedDesc": "100% विश्वसनीय",
+    "liveWeather": "लाइव मौसम",
+    "weatherDesc": "रियल-टाइम अपडेट",
+    "accessible": "सुलभ यात्रा",
+    "accessibleDesc": "सभी के लिए अनुकूल",
+    "secureLabel": "सुरक्षित",
+    "secureDesc": "सरकार सत्यापित"
   },
   "trust": {
     "title": "स्रोत एवं सत्यापन",
@@ -83,5 +120,8 @@
     "liveAt": "लाइव मौसम",
     "condition": "स्थिति",
     "temp": "तापमान"
+  },
+  "sidebar": {
+    "quickAccess": "त्वरित पहुँच"
   }
 }

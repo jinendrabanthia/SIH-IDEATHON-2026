@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable dark mode via class strategy */
+@variant dark (&:where(.dark, .dark *));
+
 /* Leaflet Map CSS */
 @import "leaflet/dist/leaflet.css";
 
@@ -10,6 +13,12 @@ body {
   color: #0f172a;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: #0f172a;
+  color: #f1f5f9;
 }
 
 /* Custom Leaflet Map Pin Styles */
