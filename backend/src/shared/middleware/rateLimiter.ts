@@ -50,3 +50,20 @@ export const feedbackLimiter = rateLimit({
     },
   },
 });
+
+/**
+ * Auth limiter — aggressive rate limiting for login/register endpoints.
+ * 5 requests per 15 minutes per IP.
+ */
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: {
+      code: 'RATE_LIMITED',
+      message: 'Too many authentication attempts. Please try again later.',
+    },
+  },
+});

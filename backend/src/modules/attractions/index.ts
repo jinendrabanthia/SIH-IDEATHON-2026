@@ -1,13 +1,18 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import { prisma } from '../../shared/db/index.js';
 import { AppError } from '../../shared/middleware/errorHandler.js';
 
 const router = Router();
 
+const uuidParamSchema = z.object({
+  id: z.string().uuid(),
+}).strict();
+
 // GET all facts for an attraction with provenance details
 router.get('/:id/facts', async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = uuidParamSchema.parse(req.params);
 
     // Verify attraction exists
     const attraction = await prisma.attraction.findUnique({
@@ -33,7 +38,7 @@ router.get('/:id/facts', async (req, res, next) => {
       }
     });
 
-    // Map to FactProvenance DTO
+    // Map to FactProvenance DTO — excludes internal fields
     const provenance = facts.map(fact => ({
       fact_id: fact.id,
       fact_key: fact.factKey,
@@ -49,6 +54,12 @@ router.get('/:id/facts', async (req, res, next) => {
 
     res.json({ data: provenance });
   } catch (err) {
+    if (err instanceof z.ZodError) {
+      res.status(400).json({
+        error: { code: 'VALIDATION_ERROR', message: 'Invalid attraction ID', details: err.flatten().fieldErrors },
+      });
+      return;
+    }
     next(err);
   }
 });

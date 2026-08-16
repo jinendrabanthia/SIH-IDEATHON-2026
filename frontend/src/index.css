@@ -21,6 +21,62 @@ body {
   color: #f1f5f9;
 }
 
+/* ===== CUSTOM SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ===== PRINT STYLES FOR PDF EXPORT (Feature 6) ===== */
+@media print {
+  /* Hide UI controls and non-essential elements */
+  header, nav, footer, button, .no-print {
+    display: none !important;
+  }
+
+  /* Reset backgrounds for clean printing */
+  body, main, div {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+  }
+
+  /* Expand the main content to full width */
+  main {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure day blocks don't split across pages */
+  .print-day-block {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 2rem !important;
+  }
+
+  /* Ensure individual items don't split across pages */
+  .print-item {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    border: 1px solid #ccc !important;
+    margin-bottom: 1rem !important;
+  }
+}
+
 /* Custom Leaflet Map Pin Styles */
 .custom-map-pin {
   background: transparent;

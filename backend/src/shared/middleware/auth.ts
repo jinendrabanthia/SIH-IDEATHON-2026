@@ -4,6 +4,9 @@ import { env } from '../config/index.js';
 
 const DEV_SECRET_PREFIX = 'dev-jwt-secret';
 
+export const ACCESS_TOKEN_EXPIRY = '15m';
+export const REFRESH_TOKEN_EXPIRY_DAYS = 7;
+
 export interface AuthPayload {
   userId: string;
   email: string;
