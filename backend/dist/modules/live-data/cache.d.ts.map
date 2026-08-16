@@ -1,0 +1,1 @@
+{"version":3,"file":"cache.d.ts","sourceRoot":"","sources":["../../../src/modules/live-data/cache.ts"],"names":[],"mappings":"AAKA,cAAM,aAAa;IACjB,OAAO,CAAC,KAAK,CAA0C;IAEvD;;OAEG;IACH,GAAG,CAAC,CAAC,EAAE,GAAG,EAAE,MAAM,EAAE,KAAK,EAAE,CAAC,EAAE,UAAU,EAAE,MAAM,GAAG,IAAI;IAKvD;;OAEG;IACH,GAAG,CAAC,CAAC,EAAE,GAAG,EAAE,MAAM,GAAG,CAAC,GAAG,IAAI;CAY9B;AAED,eAAO,MAAM,KAAK,eAAsB,CAAC"}

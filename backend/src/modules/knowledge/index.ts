@@ -5,14 +5,37 @@ import { AppError } from '../../shared/middleware/errorHandler.js';
 
 const router = Router();
 
-const uuidParamSchema = z.object({
-  id: z.string().uuid(),
+// ─── Schemas ─────────────────────────────────────────────────────────────────
+
+const idParamSchema = z.object({
+  id: z.string().min(1).max(100), // Accepts both UUID and slug IDs (e.g. 'dest-bhubaneswar')
 }).strict();
 
-// GET all destinations
+const destinationsQuerySchema = z.object({
+  region: z.string().optional(),
+  country: z.string().optional(),
+}).strict();
+
+const attractionsQuerySchema = z.object({
+  categories: z.string().optional(),          // comma-separated list: "Heritage,Spiritual"
+  accessibilityWheelchair: z.enum(['true', 'false']).optional(),
+  indoorOutdoor: z.enum(['indoor', 'outdoor', 'mixed']).optional(),
+  search: z.string().max(100).optional(),     // name search
+}).strict();
+
+// ─── GET /destinations — list all destinations ───────────────────────────────
 router.get('/destinations', async (req, res, next) => {
   try {
+    const query = destinationsQuerySchema.safeParse(req.query);
+    const where = query.success
+      ? {
+          ...(query.data.region ? { region: { contains: query.data.region, mode: 'insensitive' as const } } : {}),
+          ...(query.data.country ? { country: { contains: query.data.country, mode: 'insensitive' as const } } : {}),
+        }
+      : {};
+
     const destinations = await prisma.destination.findMany({
+      where,
       orderBy: { name: 'asc' },
     });
     res.json({ data: destinations });
@@ -21,27 +44,76 @@ router.get('/destinations', async (req, res, next) => {
   }
 });
 
-// GET attractions by destination
+// ─── GET /destinations/:id — single destination with attraction count ─────────
+router.get('/destinations/:id', async (req, res, next) => {
+  try {
+    const { id } = idParamSchema.parse(req.params);
+    const destination = await prisma.destination.findUnique({
+      where: { id },
+      include: {
+        _count: { select: { attractions: true } },
+      },
+    });
+
+    if (!destination) {
+      throw new AppError('Destination not found', 404, 'NOT_FOUND');
+    }
+
+    res.json({ data: destination });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Invalid destination ID' } });
+      return;
+    }
+    next(err);
+  }
+});
+
+// ─── GET /destinations/:id/attractions — list attractions with optional filters ─
 router.get('/destinations/:id/attractions', async (req, res, next) => {
   try {
-    const { id } = uuidParamSchema.parse(req.params);
+    const { id } = idParamSchema.parse(req.params);
 
-    // Verify destination exists
+    const queryResult = attractionsQuerySchema.safeParse(req.query);
+    const filters = queryResult.success ? queryResult.data : {};
+
     const destination = await prisma.destination.findUnique({ where: { id } });
     if (!destination) {
       throw new AppError('Destination not found', 404, 'NOT_FOUND');
     }
 
-    const attractions = await prisma.attraction.findMany({
-      where: { destinationId: id },
+    // Build Prisma where clause from filters
+    const where: Record<string, unknown> = { destinationId: id };
+
+    if (filters.accessibilityWheelchair === 'true') {
+      where.accessibilityWheelchair = true;
+    }
+
+    if (filters.indoorOutdoor) {
+      where.indoorOutdoor = filters.indoorOutdoor;
+    }
+
+    if (filters.search) {
+      where.name = { contains: filters.search, mode: 'insensitive' };
+    }
+
+    let attractions = await prisma.attraction.findMany({
+      where,
       orderBy: { name: 'asc' },
     });
+
+    // Category filter — done in-memory since categories is a String[] field
+    if (filters.categories) {
+      const requested = filters.categories.split(',').map((c) => c.trim().toLowerCase());
+      attractions = attractions.filter((a) =>
+        a.categories.some((cat) => requested.includes(cat.toLowerCase()))
+      );
+    }
+
     res.json({ data: attractions });
   } catch (err) {
     if (err instanceof z.ZodError) {
-      res.status(400).json({
-        error: { code: 'VALIDATION_ERROR', message: 'Invalid destination ID', details: err.flatten().fieldErrors },
-      });
+      res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Invalid destination ID' } });
       return;
     }
     next(err);

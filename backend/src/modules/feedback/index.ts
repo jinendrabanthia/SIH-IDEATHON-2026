@@ -9,7 +9,7 @@ import { sanitizeBody } from '../../shared/middleware/sanitize.js';
 const router = Router();
 
 const feedbackSchema = z.object({
-  entityId: z.string().uuid(),
+  entityId: z.string().min(1).max(100), // supports both UUID and slug IDs
   entityType: z.enum(['ATTRACTION', 'FACT', 'CROWD_RECORD']),
   feedbackType: z.enum(['INACCURATE', 'OUTDATED', 'OTHER']),
   comment: z.string().max(500).optional(),

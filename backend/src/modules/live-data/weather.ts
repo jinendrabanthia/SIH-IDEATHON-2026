@@ -60,7 +60,14 @@ export async function getWeatherWarnings(lat: number, lon: number, startDate: Da
     const response = await fetch(url);
     if (!response.ok) return warnings;
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      daily?: {
+        time?: string[];
+        temperature_2m_max?: number[];
+        precipitation_sum?: number[];
+        weather_code?: number[];
+      };
+    };
     const daily = data.daily;
     if (!daily || !daily.time) return warnings;
 
@@ -71,10 +78,10 @@ export async function getWeatherWarnings(lat: number, lon: number, startDate: Da
       const forecastDate = new Date(daily.time[i]);
       // If the forecast date is within our trip window
       if (forecastDate >= startDate && forecastDate <= endDate) {
-        if (daily.temperature_2m_max[i] > 40) {
+        if ((daily.temperature_2m_max?.[i] ?? 0) > 40) {
           hasExtremeHeat = true;
         }
-        if (daily.precipitation_sum[i] > 20 || [63, 65, 67, 81, 82, 95, 96, 99].includes(daily.weather_code[i])) {
+        if ((daily.precipitation_sum?.[i] ?? 0) > 20 || [63, 65, 67, 81, 82, 95, 96, 99].includes(daily.weather_code?.[i] ?? 0)) {
           hasHeavyRain = true;
         }
       }

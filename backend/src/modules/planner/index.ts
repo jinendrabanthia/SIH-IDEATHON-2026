@@ -16,14 +16,22 @@ const VISIT_DURATION_MINUTES = 120;
 const ROUTING_FALLBACK_MINUTES = 20;
 
 const plannerInputSchema = z.object({
-  destinationId: z.string().uuid(),
+  destinationId: z.string().min(1).max(100), // supports both UUID and slug IDs
   startDate: z.string().datetime(),
+  endDate: z.string().datetime().optional(), // optional convenience field, ignored by engine
   days: z.number().int().min(1).max(14),
   preferences: z.object({
     pace: z.enum(['RELAXED', 'MODERATE', 'PACKED']).default('MODERATE'),
     accessibilityWheelchair: z.boolean().default(false),
+    accessibilityVision: z.boolean().default(false),
+    accessibilityHearing: z.boolean().default(false),
+    accessibilityCognitive: z.boolean().default(false),
     interests: z.array(z.string().max(50)).max(20).default([]),
     transportPreference: z.enum(['WALKING', 'PUBLIC_TRANSIT', 'CAB', 'OWN_VEHICLE', 'MIXED']).default('MIXED'),
+    groupType: z.enum(['SOLO', 'COUPLE', 'FAMILY', 'GROUP']).default('SOLO').optional(),
+    walkingToleranceMinutes: z.number().int().min(5).max(240).default(30).optional(),
+    indoorOutdoorPreference: z.enum(['indoor', 'outdoor', 'mixed']).default('mixed').optional(),
+    localBusinessPreference: z.boolean().default(false).optional(),
   }).strict(),
 }).strict();
 
