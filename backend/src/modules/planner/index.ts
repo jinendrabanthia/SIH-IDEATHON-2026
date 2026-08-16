@@ -4,7 +4,9 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../../shared/db/index.js';
 import { AppError } from '../../shared/middleware/errorHandler.js';
+import { getHolidays } from '../services/index.js';
 import { getRoute } from '../live-data/routing.js';
+import { getWeatherWarnings } from '../live-data/weather.js';
 
 const router = Router();
 
@@ -97,8 +99,8 @@ const buildTrustSummary = (attraction: PlannerAttraction, warnings: string[]) =>
     .map(factToProvenance);
 
   const overallStatus = facts.reduce<VerificationStatus>(
-    (worst, fact) => riskRank[fact.verification_status] > riskRank[worst] ? fact.verification_status : worst,
-    facts.length > 0 ? facts[0].verification_status : VerificationStatus.UNVERIFIED,
+    (worst, fact) => riskRank[fact.verification_status as VerificationStatus] > riskRank[worst] ? (fact.verification_status as VerificationStatus) : worst,
+    facts.length > 0 ? (facts[0].verification_status as VerificationStatus) : VerificationStatus.UNVERIFIED,
   );
 
   return {
@@ -152,7 +154,7 @@ const exclusionFor = (attraction: PlannerAttraction, tripStart: Date): Exclusion
       entityId: attraction.id,
       attractionName: attraction.name,
       reason: 'Excluded because current crowd level is severe',
-      verificationStatus: crowd.verificationStatus,
+      verificationStatus: crowd.verificationStatus as VerificationStatus,
     };
   }
 
@@ -282,6 +284,45 @@ router.post('/generate', async (req, res, next) => {
     const tripStart = new Date(input.startDate);
     const warnings: string[] = [];
     const excluded: Exclusion[] = [];
+
+    // Weather-Aware Warnings (Feature 5)
+    try {
+      const destination = await prisma.destination.findUnique({ where: { id: input.destinationId } });
+      if (destination) {
+        const tripEnd = new Date(tripStart);
+        tripEnd.setDate(tripStart.getDate() + input.days - 1);
+        const weatherWarnings = await getWeatherWarnings(
+          destination.latitude,
+          destination.longitude,
+          tripStart,
+          tripEnd
+        );
+        warnings.push(...weatherWarnings);
+      }
+    } catch {
+      // Fail silently if weather fails
+    }
+
+    // Public Holiday Crowd Risk Warning (Nager.Date integration)
+    try {
+      const tripYear = tripStart.getFullYear();
+      // Only IN implemented for now since destinations are mostly India
+      const holidays = await getHolidays('IN', tripYear);
+      
+      for (let day = 0; day < input.days; day++) {
+        const currentDate = new Date(tripStart);
+        currentDate.setDate(currentDate.getDate() + day);
+        const dateString = currentDate.toISOString().split('T')[0];
+        
+        const holiday = holidays.find((h: any) => h.date === dateString);
+        if (holiday) {
+          warnings.push(`High Crowd Risk: Day ${day + 1} falls on a public holiday (${holiday.name})`);
+        }
+      }
+    } catch {
+      // Ignore if holiday fetch fails
+    }
+
     const candidates = await sortCandidates(input, warnings);
 
     if (candidates.length === 0) {
