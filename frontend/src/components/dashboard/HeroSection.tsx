@@ -61,85 +61,65 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
         {/* ── LEFT CONTENT CONTENT ── */}
         <div className="relative z-10 flex flex-col justify-center px-14 pt-16 pb-36" style={{ maxWidth: '65%' }}>
           
-          {/* Heading with Exact Gradient Matches */}
-          <h1 className="text-[68px] lg:text-[80px] font-bold mb-5 select-none" style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.05, letterSpacing: '-1.5px' }}>
-            
-            {/* EXPLORE */}
-            <div className="relative inline-block">
-              <span
-                style={{
-                  /* E=orange, xp=orange-brown, l=dark-brown, ore=dark-navy */
-                  background: 'linear-gradient(90deg, #f97316 0%, #f97316 14%, #c2410c 22%, #7f1d1d 30%, #1e3a5f 40%, #0f2d4a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  display: 'inline-block',
-                  paddingRight: '8px'
-                }}
-              >
-                Explore
-              </span>
-              
-              {/* Paper-plane positioned accurately relative to "Explore" */}
-              <div className="absolute top-0 right-0 translate-x-[92%] -translate-y-[15%] pointer-events-none">
-                <svg viewBox="0 0 200 60" width="150" height="60" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
-                  <defs>
-                    <linearGradient id="trailGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ea580c" />
-                      <stop offset="25%" stopColor="#f97316" />
-                      <stop offset="50%" stopColor="#16a34a" />
-                      <stop offset="100%" stopColor="#15803d" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 5 55 Q 60 20, 110 25 Q 140 28, 165 10"
-                    fill="none"
-                    stroke="url(#trailGradient)"
-                    strokeWidth="2.5"
-                    strokeDasharray="5 7"
-                    strokeLinecap="round"
-                  />
-                  <g transform="translate(162, 5) rotate(-35)">
-                    <polygon points="0,0 12,4 0,8 3,4" fill="#15803d" />
-                  </g>
-                </svg>
-              </div>
+          {/* Heading */}
+          <div className="relative mb-5">
+            {/* Paper-plane trail */}
+            <div className="absolute pointer-events-none" style={{ top: '-10px', left: '240px' }}>
+              <svg viewBox="0 0 200 70" width="160" height="70" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
+                <path
+                  d="M 5 60 Q 55 30, 105 35 Q 145 38, 170 10"
+                  fill="none"
+                  stroke="url(#planeGrad)"
+                  strokeWidth="2.5"
+                  strokeDasharray="5 7"
+                  strokeLinecap="round"
+                />
+                <defs>
+                  <linearGradient id="planeGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#f97316" />
+                    <stop offset="50%" stopColor="#16a34a" />
+                    <stop offset="100%" stopColor="#16a34a" />
+                  </linearGradient>
+                </defs>
+                <g transform="translate(167, 6) rotate(-35)">
+                  <polygon points="0,0 13,5 0,10 3,5" fill="#16a34a" />
+                </g>
+              </svg>
             </div>
-            
-            <br />
-            
-            {/* INCREDIBLE */}
-            <div
-              style={{
-                /* I=green, ncredi=green-to-teal-to-dark-navy, ble=dark-navy */
-                background: 'linear-gradient(90deg, #16a34a 0%, #16a34a 12%, #0d9488 28%, #0369a1 42%, #1e3a5f 55%, #0f2d4a 100%)',
+
+            <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.05, letterSpacing: '-1.5px', fontSize: '76px', fontWeight: 700, margin: 0 }}>
+              {/* EXPLORE: orange -> dark navy */}
+              <span style={{
+                background: 'linear-gradient(90deg, #f97316 0%, #f97316 18%, #1e3a5f 42%, #0f2d4a 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                display: 'inline-block',
-                paddingRight: '8px'
-              }}
-            >
-              Incredible
-            </div>
-            
-            <br />
-            
-            {/* INDIA */}
-            <div
-              style={{
-                /* I=green, nd=green-to-gold, ia=gold-to-orange */
+                color: 'transparent',
+                display: 'block'
+              }}>Explore</span>
+
+              {/* INCREDIBLE: green -> teal -> dark navy */}
+              <span style={{
+                background: 'linear-gradient(90deg, #16a34a 0%, #16a34a 18%, #0d9488 35%, #0369a1 50%, #1e3a5f 65%, #0f2d4a 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
+                display: 'block'
+              }}>Incredible</span>
+
+              {/* INDIA: green -> gold -> orange */}
+              <span style={{
                 background: 'linear-gradient(90deg, #16a34a 0%, #16a34a 35%, #ca8a04 58%, #f97316 78%, #ea580c 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                paddingRight: '12px',
-                display: 'inline-block'
-              }}
-            >
-              India
-            </div>
-          </h1>
+                color: 'transparent',
+                display: 'block',
+                paddingRight: '8px'
+              }}>India</span>
+            </h1>
+          </div>
 
           {/* Subtitle */}
           <p className="text-[17px] text-gray-600 font-medium leading-relaxed mb-8" style={{ maxWidth: '400px' }}>
