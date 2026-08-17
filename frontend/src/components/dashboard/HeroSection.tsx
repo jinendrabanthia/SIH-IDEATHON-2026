@@ -99,18 +99,35 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
 
             {/* Heading — India Tricolor gradient with fade */}
             <h1 className="text-4xl lg:text-5xl font-black leading-[1.15] mb-3">
-              <span style={{ color: '#0f172a' }}>Explore</span>
-              <br />
-              <span style={{ color: '#0f172a' }}>Incredible</span>
-              {' '}
               <span
                 style={{
-                  background: 'linear-gradient(90deg, #FF6B00 0%, #FF9933 33%, #000080 50%, #138808 68%, #0a6b05 100%)',
+                  background: 'linear-gradient(90deg, #FF6B00 0%, #FF9933 30%, #1a1a2e 60%, #1a1a2e 70%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
-                  textShadow: 'none',
-                  filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))',
+                }}
+              >
+                Explore
+              </span>
+              <br />
+              <span
+                style={{
+                  background: 'linear-gradient(90deg, #1a1a2e 0%, #1a1a2e 30%, #138808 65%, #0a6b05 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                Incredible
+              </span>
+              {' '}
+              <span
+                style={{
+                  background: 'linear-gradient(135deg, #FF9933 0%, #FF9933 25%, #ffffff 45%, #138808 70%, #0a6b05 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  filter: 'drop-shadow(0 0 12px rgba(255,153,51,0.3))',
                 }}
               >
                 India
