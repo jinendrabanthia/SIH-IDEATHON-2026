@@ -1,7 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { authApi, AuthUser } from '../api/services/tripsApi';
+import { supabase } from './supabase';
+import { User, Session } from '@supabase/supabase-js';
+import { apiClient } from '../api/client';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+export type AuthUser = {
+  id: string;
+  email: string;
+  name?: string;
+};
 
 interface AuthContextValue {
   user: AuthUser | null;
@@ -9,98 +15,126 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name?: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithPhone: (phone: string) => Promise<void>;
+  verifyOtp: (phone: string, token: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
-// ─── Context ──────────────────────────────────────────────────────────────────
-
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-const TOKEN_KEY = 'margdarshak_access_token';
-const USER_KEY = 'margdarshak_user';
-
-// ─── Provider ─────────────────────────────────────────────────────────────────
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<AuthUser | null>(() => {
-    try {
-      const stored = localStorage.getItem(USER_KEY);
-      return stored ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
-  });
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
-  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // On mount, try to refresh the session silently if we have a stored user
+  // Set up API client interceptor to attach token
   useEffect(() => {
-    if (user && !token) {
-      authApi.refresh()
-        .then((data) => {
-          setToken(data.accessToken);
-          setUser(data.user);
-          localStorage.setItem(TOKEN_KEY, data.accessToken);
-          localStorage.setItem(USER_KEY, JSON.stringify(data.user));
-        })
-        .catch(() => {
-          // Refresh token invalid/expired — clear state
-          setUser(null);
-          setToken(null);
-          localStorage.removeItem(TOKEN_KEY);
-          localStorage.removeItem(USER_KEY);
-        });
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const requestInterceptor = apiClient.interceptors.request.use((config) => {
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
 
-  const persist = useCallback((authUser: AuthUser, accessToken: string) => {
-    setUser(authUser);
-    setToken(accessToken);
-    localStorage.setItem(TOKEN_KEY, accessToken);
-    localStorage.setItem(USER_KEY, JSON.stringify(authUser));
+    return () => {
+      apiClient.interceptors.request.eject(requestInterceptor);
+    };
+  }, [token]);
+
+  const updateState = (session: Session | null) => {
+    if (session?.user) {
+      setUser({
+        id: session.user.id,
+        email: session.user.email || '',
+        name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
+      });
+      setToken(session.access_token);
+    } else {
+      setUser(null);
+      setToken(null);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      updateState(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      updateState(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
-    try {
-      const data = await authApi.login(email, password);
-      persist(data.user, data.accessToken);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [persist]);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setIsLoading(false);
+    if (error) throw error;
+  }, []);
 
   const register = useCallback(async (email: string, password: string, name?: string) => {
     setIsLoading(true);
-    try {
-      const data = await authApi.register(email, password, name);
-      persist(data.user, data.accessToken);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [persist]);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name,
+        },
+      },
+    });
+    setIsLoading(false);
+    if (error) throw error;
+  }, []);
+
+  const signInWithGoogle = useCallback(async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+    if (error) throw error;
+  }, []);
+
+  const signInWithPhone = useCallback(async (phone: string) => {
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithOtp({
+      phone,
+    });
+    setIsLoading(false);
+    if (error) throw error;
+  }, []);
+
+  const verifyOtp = useCallback(async (phone: string, token: string) => {
+    setIsLoading(true);
+    const { error } = await supabase.auth.verifyOtp({
+      phone,
+      token,
+      type: 'sms',
+    });
+    setIsLoading(false);
+    if (error) throw error;
+  }, []);
 
   const logout = useCallback(async () => {
-    try {
-      await authApi.logout();
-    } catch {
-      // Best-effort logout
-    } finally {
-      setUser(null);
-      setToken(null);
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
-    }
+    setIsLoading(true);
+    await supabase.auth.signOut();
+    setIsLoading(false);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, isLoading, login, register, signInWithGoogle, signInWithPhone, verifyOtp, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-// ─── Hook ─────────────────────────────────────────────────────────────────────
 
 export const useAuth = (): AuthContextValue => {
   const ctx = useContext(AuthContext);
