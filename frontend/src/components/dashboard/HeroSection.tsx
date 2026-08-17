@@ -86,59 +86,42 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
           {/* Content pane (left aligned, sits on top of the gradient) */}
           <div className="relative z-10 flex flex-col justify-center px-10 py-9" style={{ maxWidth: '55%' }}>
 
-            {/* Paper-plane + dotted trail */}
-            <div className="absolute top-6 right-[-30px] pointer-events-none select-none">
-              <svg viewBox="0 0 200 60" width="180" height="60" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
-                <path
-                  d="M 10 50 Q 60 20, 120 30 Q 160 36, 185 10"
-                  fill="none"
-                  stroke="#22c55e"
-                  strokeWidth="1.5"
-                  strokeDasharray="4 4"
-                  opacity="0.8"
-                />
-                <g transform="translate(175, 4) rotate(-35)">
-                  <polygon points="0,0 14,5 0,10 3,5" fill="#22c55e" />
-                </g>
-              </svg>
-            </div>
+            {/* Heading — Dark text with India in Tricolor gradient */}
+            <div className="relative mb-3">
+              {/* Paper-plane + dotted trail positioned relative to the heading */}
+              <div className="absolute top-0 right-10 pointer-events-none select-none" style={{ transform: 'translateY(-50%)' }}>
+                <svg viewBox="0 0 200 60" width="180" height="60" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
+                  <path
+                    d="M 10 50 Q 60 20, 120 30 Q 160 36, 185 10"
+                    fill="none"
+                    stroke="#22c55e"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 4"
+                    opacity="0.8"
+                  />
+                  <g transform="translate(175, 4) rotate(-35)">
+                    <polygon points="0,0 14,5 0,10 3,5" fill="#22c55e" />
+                  </g>
+                </svg>
+              </div>
 
-            {/* Heading — India Tricolor gradient with fade */}
-            <h1 className="text-4xl lg:text-5xl font-black leading-[1.15] mb-3">
-              <span
-                style={{
-                  background: 'linear-gradient(90deg, #FF6B00 0%, #FF9933 30%, #1a1a2e 60%, #1a1a2e 70%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                Explore
-              </span>
-              <br />
-              <span
-                style={{
-                  background: 'linear-gradient(90deg, #1a1a2e 0%, #1a1a2e 30%, #138808 65%, #0a6b05 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                Incredible
-              </span>
-              {' '}
-              <span
-                style={{
-                  background: 'linear-gradient(135deg, #FF9933 0%, #FF9933 25%, #ffffff 45%, #138808 70%, #0a6b05 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  filter: 'drop-shadow(0 0 12px rgba(255,153,51,0.3))',
-                }}
-              >
-                India
-              </span>
-            </h1>
+              <h1 className="text-[44px] lg:text-[56px] font-black leading-[1.1] text-[#0f172a] tracking-tight">
+                Explore<br />
+                Incredible{' '}
+                <span
+                  style={{
+                    background: 'linear-gradient(90deg, #FF9933 0%, #FF9933 25%, #FFFFFF 50%, #138808 75%, #138808 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.15))',
+                    display: 'inline-block'
+                  }}
+                >
+                  India
+                </span>
+              </h1>
+            </div>
 
             {/* Subtitle */}
             <p className="text-sm text-gray-500 leading-relaxed mb-6" style={{ maxWidth: '300px' }}>
@@ -151,22 +134,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
             {/* Search Bar */}
             <form onSubmit={handleSearch}>
               <div
-                className="flex items-center rounded-xl border border-gray-200 shadow-sm overflow-hidden"
-                style={{ maxWidth: '370px', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)' }}
+                className="flex items-center rounded-full border border-gray-200 shadow-sm p-1.5"
+                style={{ maxWidth: '400px', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)' }}
               >
-                <Search className="ml-3 text-gray-400 shrink-0" size={16} />
+                <Search className="ml-3 text-gray-400 shrink-0" size={18} />
                 <input
                   type="text"
                   placeholder={t('hero.searchPlaceholder', 'Where do you want to explore?')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1 pl-2 pr-3 py-2.5 text-sm bg-transparent focus:outline-none text-gray-700 placeholder-gray-400"
+                  className="flex-1 pl-3 pr-3 py-2.5 text-sm bg-transparent focus:outline-none text-gray-800 placeholder-gray-400"
                 />
                 <button
                   type="submit"
-                  className="m-1 px-3 py-2 rounded-lg bg-green-500 hover:bg-green-600 active:scale-95 text-white transition-all flex items-center justify-center"
+                  className="px-5 py-2.5 rounded-full bg-[#138808] hover:bg-green-700 active:scale-95 text-white transition-all flex items-center justify-center"
                 >
-                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
