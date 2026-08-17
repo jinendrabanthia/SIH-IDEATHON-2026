@@ -125,16 +125,7 @@ export const Sidebar: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer Info */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-800 bg-gradient-to-t from-white dark:from-gray-900 to-transparent">
-        <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-3 text-center">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span className="text-xs font-bold text-green-700 dark:text-green-400">{t('app.trustBadge100', '100% Verified')}</span>
-          </div>
-          <p className="text-xs text-green-600 dark:text-green-500">{t('app.trustBadge', 'All data verified by Govt. & Official Sources')}</p>
-        </div>
-      </div>
+
     </aside>
   );
 };

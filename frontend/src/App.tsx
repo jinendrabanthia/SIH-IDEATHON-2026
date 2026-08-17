@@ -16,6 +16,7 @@ import { AttractionExplorerPage } from './pages/AttractionExplorerPage';
 import { SharedTripPage } from './pages/SharedTripPage';
 import { TripDetailsPage } from './pages/TripDetailsPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
+import { DestinationPage } from './pages/DestinationPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -111,6 +112,7 @@ function App() {
                 <Route path="/share/:token" element={<SharedTripPage />} />
                 <Route path="/trips/:id" element={<TripDetailsPage />} />
                 <Route path="/analytics" element={<AnalyticsPage />} />
+                <Route path="/destination/:id" element={<DestinationPage />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Routes>
             </BrowserRouter>

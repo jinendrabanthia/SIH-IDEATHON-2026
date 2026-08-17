@@ -60,11 +60,8 @@ export const Header: React.FC<HeaderProps> = () => {
           <input
             type="text"
             placeholder="Search destinations, places..."
-            className="w-48 pl-9 pr-14 py-2 rounded-lg border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
+            className="w-80 md:w-96 pl-9 pr-14 py-2 rounded-lg border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-300"
           />
-          <kbd className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-gray-500 dark:text-gray-400">
-            Ctrl /
-          </kbd>
         </div>
 
         {/* Theme Toggle */}

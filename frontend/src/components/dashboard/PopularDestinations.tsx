@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Star, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface Destination {
   id: string;
@@ -105,6 +106,7 @@ export const PopularDestinations: React.FC<PopularDestinationsProps> = ({
 }) => {
   const [page, setPage] = useState(0);
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const visible = 4;
   const totalPages = Math.ceil(destinations.length / visible);
   const shown = destinations.slice(page * visible, page * visible + visible);
@@ -127,14 +129,15 @@ export const PopularDestinations: React.FC<PopularDestinationsProps> = ({
           {shown.map((dest) => (
             <div
               key={dest.id}
-              className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all duration-300 cursor-pointer group"
+              onClick={() => navigate(`/destination/${dest.name.toLowerCase()}`)}
+              className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-2xl hover:-translate-y-2 hover:border-orange-200 transition-all duration-300 cursor-pointer group"
             >
               {/* Photo */}
               <div className="relative h-40 overflow-hidden">
                 <img
                   src={dest.image}
                   alt={dest.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   onError={(e) => {
                     // fallback gradient if image fails
                     const el = e.currentTarget.parentElement!;
@@ -142,7 +145,12 @@ export const PopularDestinations: React.FC<PopularDestinationsProps> = ({
                     el.style.background = 'linear-gradient(135deg, #fde68a, #fca5a5)';
                   }}
                 />
-
+                {/* Premium Hover Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
+                  <span className="text-white font-semibold text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    View Budget & Info
+                  </span>
+                </div>
               </div>
 
               {/* Info */}
