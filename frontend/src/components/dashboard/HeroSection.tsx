@@ -108,9 +108,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
                 display: 'block'
               }}>Incredible</span>
 
-              {/* INDIA: green -> gold -> orange */}
+              {/* INDIA: saffron fading into green */}
               <span style={{
-                background: 'linear-gradient(90deg, #16a34a 0%, #16a34a 35%, #ca8a04 58%, #f97316 78%, #ea580c 100%)',
+                background: 'linear-gradient(90deg, #f97316 0%, #fb923c 30%, #fbbf24 50%, #4ade80 70%, #16a34a 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
