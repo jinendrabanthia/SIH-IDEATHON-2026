@@ -29,7 +29,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.9,
       accessibility: ['Wheelchair', 'Visual Support'],
-      image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Taj_Mahal_in_March_2004.jpg',
       description: 'The Taj Mahal is an ivory-white marble mausoleum on the right bank of the river Yamuna in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan to house the tomb of his favourite wife, Mumtaz Mahal. It is considered a masterpiece of architectural style in conception, treatment and execution.'
     },
     {
@@ -39,7 +39,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.8,
       accessibility: ['Wheelchair', 'Visual Support'],
-      image: 'https://images.unsplash.com/photo-1585506942812-e72b29cef752?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/0/09/India_Gate_in_New_Delhi_03-2016.jpg',
       description: 'The India Gate is a war memorial located astride the Rajpath, on the eastern edge of the "ceremonial axis" of New Delhi. It stands as a memorial to 70,000 soldiers of the British Indian Army who died in between 1914 and 1921 in the First World War.'
     },
     {
@@ -49,7 +49,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Architecture',
       rating: 4.7,
       accessibility: ['Wheelchair', 'Hearing Support'],
-      image: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/Parliament_House_of_India.jpg',
       description: 'The Sansad Bhavan (Parliament House) is the seat of the Parliament of India. It houses the Lok Sabha and the Rajya Sabha which represent lower and upper houses respectively in India\'s bicameral parliament.'
     },
     {
@@ -59,7 +59,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.6,
       accessibility: ['Visual Support'],
-      image: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/8/87/Jantar_Mantar_Delhi_India.jpg',
       description: 'Jantar Mantar is an equinoctial sundial, consisting of a gigantic triangular gnomon with the hypotenuse parallel to the Earth\'s axis. It is one of five observatories built by Maharaja Jai Singh II of Jaipur.'
     },
     {
@@ -69,7 +69,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.8,
       accessibility: ['Wheelchair', 'Hearing Support'],
-      image: 'https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Qutb_Minar_2011.jpg',
       description: 'The Qutb Minar is a minaret and "victory tower" that forms part of the Qutb complex, a UNESCO World Heritage Site in the Mehrauli area of New Delhi, India. The height of Qutb Minar is 72.5 meters.'
     },
     {
@@ -79,7 +79,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.8,
       accessibility: ['Wheelchair', 'Hearing Support'],
-      image: 'https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Red_Fort_in_Delhi_03-2016.jpg',
       description: 'The Red Fort or Lal Qila is a historic fort in Old Delhi, India, that served as the main residence of the Mughal Emperors. Emperor Shah Jahan commissioned construction of the Red Fort on 12 May 1638, when he decided to shift his capital from Agra to Delhi.'
     },
     {
@@ -89,7 +89,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Architecture',
       rating: 4.7,
       accessibility: ['Wheelchair', 'Visual Support'],
-      image: 'https://images.unsplash.com/photo-1566552881560-0be862a7c445?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Gateway_of_India_in_March_2018.jpg',
       description: 'The Gateway of India is an arch-monument built in the early twentieth century in the city of Mumbai, in the Indian state of Maharashtra. It was erected to commemorate the landing of King-Emperor George V in 1911.'
     },
     {
@@ -99,7 +99,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Architecture',
       rating: 4.8,
       accessibility: ['Hearing Support'],
-      image: 'https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Hawa_Mahal%2C_Jaipur%2C_India.jpg',
       description: 'The Hawa Mahal is a palace in the city of Jaipur, India. Built from red and pink sandstone, it is on the edge of the City Palace, Jaipur, and extends to the Zenana, or women\'s chambers.'
     },
     {
@@ -109,7 +109,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.7,
       accessibility: ['Visual Support'],
-      image: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/7/71/Charminar_Hyderabad_1.jpg',
       description: 'The Charminar is a mosque and monument located in Hyderabad, Telangana, India. Constructed in 1591, the landmark is a global icon of Hyderabad and is listed among the most recognised structures in India.'
     },
     {
@@ -119,7 +119,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Museums & Culture',
       rating: 4.8,
       accessibility: ['Wheelchair', 'Visual Support', 'Hearing Support'],
-      image: 'https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/6/67/Victoria_Memorial%2C_Kolkata.jpg',
       description: 'The Victoria Memorial is a large marble building in Central Kolkata, which was built between 1906 and 1921. It is dedicated to the memory of Empress Victoria, and is now a museum and tourist destination.'
     },
     {
@@ -129,7 +129,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Spiritual',
       rating: 5.0,
       accessibility: ['Wheelchair', 'Hearing Support'],
-      image: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Golden_Temple_India.jpg',
       description: 'The Golden Temple, also known as Harmandir Sahib, meaning "abode of God", is a Gurdwara located in the city of Amritsar, Punjab, India. It is the preeminent spiritual site of Sikhism.'
     },
     {
@@ -139,7 +139,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Spiritual',
       rating: 4.9,
       accessibility: ['Wheelchair', 'Visual Support'],
-      image: 'https://images.unsplash.com/photo-1583143874828-de3d288be51a?auto=format&fit=crop&w=800&q=80',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/c/cb/Madurai_Meenakshi_Amman_Temple_Overview.jpg',
       description: 'Meenakshi Temple is a historic Hindu temple located on the southern bank of the Vaigai River in the temple city of Madurai, Tamil Nadu, India. It is dedicated to the goddess Meenakshi, a form of Parvati, and her consort, Sundareshwar.'
     }
   ];
@@ -242,7 +242,7 @@ export const ExploreIndia: React.FC = () => {
               style={{ animationFillMode: 'both', animationDelay: `${index * 50}ms` }}
             >
               <div className="relative h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
-                <img src={attraction.image} alt={attraction.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src={attraction.image} alt={attraction.name} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                   <span className="text-white text-sm font-semibold flex items-center gap-1"><Info size={16}/> Click for details</span>
                 </div>
@@ -295,7 +295,7 @@ export const ExploreIndia: React.FC = () => {
 
             {/* Large Image Header */}
             <div className="h-64 sm:h-72 w-full relative shrink-0 bg-gray-200 dark:bg-gray-800">
-              <img src={selectedAttraction.image} alt={selectedAttraction.name} className="w-full h-full object-cover" />
+              <img src={selectedAttraction.image} alt={selectedAttraction.name} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               
               <div className="absolute bottom-6 left-6 right-6 text-white">
