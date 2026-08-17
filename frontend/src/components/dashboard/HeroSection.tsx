@@ -108,16 +108,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
                 display: 'block'
               }}>Incredible</span>
 
-              {/* INDIA: saffron fading into green */}
-              <span style={{
-                background: 'linear-gradient(90deg, #f97316 0%, #fb923c 30%, #fbbf24 50%, #4ade80 70%, #16a34a 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                color: 'transparent',
-                display: 'block',
-                paddingRight: '8px'
-              }}>India</span>
+              {/* INDIA: per-letter saffron -> green (reliable, no background-clip) */}
+              <span style={{ display: 'block', fontFamily: 'inherit', fontSize: 'inherit', fontWeight: 'inherit', letterSpacing: 'inherit' }}>
+                <span style={{ color: '#f97316' }}>I</span>
+                <span style={{ color: '#fb923c' }}>n</span>
+                <span style={{ color: '#d4a017' }}>d</span>
+                <span style={{ color: '#4ade80' }}>i</span>
+                <span style={{ color: '#16a34a' }}>a</span>
+              </span>
             </h1>
           </div>
 
