@@ -29,7 +29,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.9,
       accessibility: ['Wheelchair', 'Visual Support'],
-      image: '/monuments/taj-mahal.jpg',
+      image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
       description: 'The Taj Mahal is an ivory-white marble mausoleum on the right bank of the river Yamuna in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan to house the tomb of his favourite wife, Mumtaz Mahal. It is considered a masterpiece of architectural style in conception, treatment and execution.'
     },
     {
@@ -39,7 +39,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.8,
       accessibility: ['Wheelchair', 'Visual Support'],
-      image: '/monuments/india-gate.jpg',
+      image: 'https://images.unsplash.com/photo-1585506942812-e72b29cef752?auto=format&fit=crop&w=800&q=80',
       description: 'The India Gate is a war memorial located astride the Rajpath, on the eastern edge of the "ceremonial axis" of New Delhi. It stands as a memorial to 70,000 soldiers of the British Indian Army who died in between 1914 and 1921 in the First World War.'
     },
     {
@@ -49,7 +49,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Architecture',
       rating: 4.7,
       accessibility: ['Wheelchair', 'Hearing Support'],
-      image: '/monuments/parliament-house.jpg',
+      image: 'https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=800&q=80',
       description: 'The Sansad Bhavan (Parliament House) is the seat of the Parliament of India. It houses the Lok Sabha and the Rajya Sabha which represent lower and upper houses respectively in India\'s bicameral parliament.'
     },
     {
@@ -59,7 +59,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.6,
       accessibility: ['Visual Support'],
-      image: '/monuments/jantar-mantar.jpg',
+      image: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=80',
       description: 'Jantar Mantar is an equinoctial sundial, consisting of a gigantic triangular gnomon with the hypotenuse parallel to the Earth\'s axis. It is one of five observatories built by Maharaja Jai Singh II of Jaipur.'
     },
     {
@@ -69,7 +69,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.8,
       accessibility: ['Wheelchair', 'Hearing Support'],
-      image: '/monuments/qutub-minar.jpg',
+      image: 'https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=800&q=80',
       description: 'The Qutb Minar is a minaret and "victory tower" that forms part of the Qutb complex, a UNESCO World Heritage Site in the Mehrauli area of New Delhi, India. The height of Qutb Minar is 72.5 meters.'
     },
     {
@@ -79,7 +79,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.8,
       accessibility: ['Wheelchair', 'Hearing Support'],
-      image: '/monuments/red-fort.jpg',
+      image: 'https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=800&q=80',
       description: 'The Red Fort or Lal Qila is a historic fort in Old Delhi, India, that served as the main residence of the Mughal Emperors. Emperor Shah Jahan commissioned construction of the Red Fort on 12 May 1638, when he decided to shift his capital from Agra to Delhi.'
     },
     {
@@ -89,7 +89,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Architecture',
       rating: 4.7,
       accessibility: ['Wheelchair', 'Visual Support'],
-      image: '/monuments/gateway-of-india.jpg',
+      image: 'https://images.unsplash.com/photo-1566552881560-0be862a7c445?auto=format&fit=crop&w=800&q=80',
       description: 'The Gateway of India is an arch-monument built in the early twentieth century in the city of Mumbai, in the Indian state of Maharashtra. It was erected to commemorate the landing of King-Emperor George V in 1911.'
     },
     {
@@ -99,7 +99,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Architecture',
       rating: 4.8,
       accessibility: ['Hearing Support'],
-      image: '/monuments/hawa-mahal.jpg',
+      image: 'https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?auto=format&fit=crop&w=800&q=80',
       description: 'The Hawa Mahal is a palace in the city of Jaipur, India. Built from red and pink sandstone, it is on the edge of the City Palace, Jaipur, and extends to the Zenana, or women\'s chambers.'
     },
     {
@@ -109,7 +109,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Heritage',
       rating: 4.7,
       accessibility: ['Visual Support'],
-      image: '/monuments/charminar.jpg',
+      image: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=800&q=80',
       description: 'The Charminar is a mosque and monument located in Hyderabad, Telangana, India. Constructed in 1591, the landmark is a global icon of Hyderabad and is listed among the most recognised structures in India.'
     },
     {
@@ -119,7 +119,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Museums & Culture',
       rating: 4.8,
       accessibility: ['Wheelchair', 'Visual Support', 'Hearing Support'],
-      image: '/monuments/victoria-memorial.jpg',
+      image: 'https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=800&q=80',
       description: 'The Victoria Memorial is a large marble building in Central Kolkata, which was built between 1906 and 1921. It is dedicated to the memory of Empress Victoria, and is now a museum and tourist destination.'
     },
     {
@@ -129,7 +129,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Spiritual',
       rating: 5.0,
       accessibility: ['Wheelchair', 'Hearing Support'],
-      image: '/monuments/golden-temple.jpg',
+      image: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=800&q=80',
       description: 'The Golden Temple, also known as Harmandir Sahib, meaning "abode of God", is a Gurdwara located in the city of Amritsar, Punjab, India. It is the preeminent spiritual site of Sikhism.'
     },
     {
@@ -139,7 +139,7 @@ export const ExploreIndia: React.FC = () => {
       category: 'Spiritual',
       rating: 4.9,
       accessibility: ['Wheelchair', 'Visual Support'],
-      image: '/monuments/meenakshi-temple.jpg',
+      image: 'https://images.unsplash.com/photo-1583143874828-de3d288be51a?auto=format&fit=crop&w=800&q=80',
       description: 'Meenakshi Temple is a historic Hindu temple located on the southern bank of the Vaigai River in the temple city of Madurai, Tamil Nadu, India. It is dedicated to the goddess Meenakshi, a form of Parvati, and her consort, Sundareshwar.'
     }
   ];
