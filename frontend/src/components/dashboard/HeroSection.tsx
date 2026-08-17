@@ -62,35 +62,44 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
         <div className="relative z-10 flex flex-col justify-center px-14 pt-16 pb-36" style={{ maxWidth: '65%' }}>
           
           {/* Heading with Exact Gradient Matches */}
-          <h1 className="text-[64px] lg:text-[76px] font-black leading-[1.05] tracking-tight mb-5 select-none">
+          <h1 className="text-[64px] lg:text-[76px] font-bold mb-5 select-none" style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 0.98, letterSpacing: '-2px' }}>
             
             {/* EXPLORE */}
             <div className="relative inline-block">
               <span
                 style={{
-                  background: 'linear-gradient(90deg, #ea580c 0%, #f97316 20%, #0f172a 40%, #0f172a 100%)',
+                  background: 'linear-gradient(90deg, #ea580c 0%, #f97316 28%, #8b2915 35%, #003366 45%, #002244 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
-                  display: 'inline-block'
+                  display: 'inline-block',
+                  paddingRight: '8px'
                 }}
               >
                 Explore
               </span>
               
               {/* Paper-plane positioned accurately relative to "Explore" */}
-              <div className="absolute top-0 right-0 translate-x-[90%] -translate-y-[20%] pointer-events-none">
-                <svg viewBox="0 0 200 60" width="160" height="60" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
+              <div className="absolute top-0 right-0 translate-x-[92%] -translate-y-[15%] pointer-events-none">
+                <svg viewBox="0 0 200 60" width="150" height="60" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
+                  <defs>
+                    <linearGradient id="trailGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#ea580c" />
+                      <stop offset="25%" stopColor="#f97316" />
+                      <stop offset="50%" stopColor="#16a34a" />
+                      <stop offset="100%" stopColor="#15803d" />
+                    </linearGradient>
+                  </defs>
                   <path
-                    d="M 10 45 Q 60 20, 110 25 Q 140 28, 165 10"
+                    d="M 5 55 Q 60 20, 110 25 Q 140 28, 165 10"
                     fill="none"
-                    stroke="#16a34a"
+                    stroke="url(#trailGradient)"
                     strokeWidth="2.5"
-                    strokeDasharray="5 6"
-                    opacity="0.9"
+                    strokeDasharray="5 7"
+                    strokeLinecap="round"
                   />
                   <g transform="translate(162, 5) rotate(-35)">
-                    <polygon points="0,0 12,4 0,8 3,4" fill="#16a34a" />
+                    <polygon points="0,0 12,4 0,8 3,4" fill="#15803d" />
                   </g>
                 </svg>
               </div>
@@ -101,11 +110,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
             {/* INCREDIBLE */}
             <div
               style={{
-                background: 'linear-gradient(90deg, #16a34a 0%, #15803d 30%, #0f172a 55%, #0f172a 100%)',
+                background: 'linear-gradient(90deg, #16a34a 0%, #15803d 35%, #004d73 45%, #003366 55%, #002244 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                display: 'inline-block'
+                display: 'inline-block',
+                paddingRight: '8px'
               }}
             >
               Incredible
@@ -116,11 +126,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
             {/* INDIA */}
             <div
               style={{
-                background: 'linear-gradient(90deg, #16a34a 0%, #15803d 30%, #ea580c 65%, #f97316 100%)',
+                background: 'linear-gradient(90deg, #16a34a 0%, #15803d 40%, #cca300 50%, #f97316 60%, #ea580c 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                paddingRight: '10px',
+                paddingRight: '12px',
                 display: 'inline-block'
               }}
             >
