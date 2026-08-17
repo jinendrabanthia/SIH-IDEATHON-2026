@@ -69,11 +69,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
             style={{ objectPosition: 'center 30%' }}
           />
 
+          {/* Dark overlay to dim the image */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'rgba(0, 0, 0, 0.30)' }}
+          />
+
           {/* White-to-transparent gradient overlay on left half for text readability */}
           <div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(to right, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 30%, rgba(255,255,255,0.60) 52%, rgba(255,255,255,0) 68%)',
+              background: 'linear-gradient(to right, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 30%, rgba(255,255,255,0.55) 52%, rgba(255,255,255,0) 68%)',
             }}
           />
 
