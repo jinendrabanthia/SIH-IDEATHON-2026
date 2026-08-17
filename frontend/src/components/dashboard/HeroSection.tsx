@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Cloud, ShieldCheck, Accessibility, Lock } from 'lucide-react';
+import { Search, Cloud, Accessibility } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import heroBg from '/hero-image/hero-bg.jpg';
@@ -8,41 +8,25 @@ interface HeroSectionProps {
   onSearch?: (query: string) => void;
 }
 
+// Custom icons to match the image exactly
+const ShieldTickIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="M9 12l2 2 4-4" />
+  </svg>
+);
+
+const LockIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect x="5" y="11" width="14" height="10" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+);
+
 export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-
-  const quickAccessCards = [
-    {
-      icon: <ShieldCheck size={20} strokeWidth={1.8} />,
-      label: 'Verified Places',
-      description: '100% Trusted',
-      color: 'text-green-600',
-      bg: 'bg-green-50',
-    },
-    {
-      icon: <Cloud size={20} strokeWidth={1.8} />,
-      label: 'Live Weather',
-      description: 'Real-time Updates',
-      color: 'text-blue-400',
-      bg: 'bg-blue-50',
-    },
-    {
-      icon: <Accessibility size={20} strokeWidth={1.8} />,
-      label: 'Accessible Travel',
-      description: 'Explore Friendly',
-      color: 'text-purple-500',
-      bg: 'bg-purple-50',
-    },
-    {
-      icon: <Lock size={20} strokeWidth={1.8} />,
-      label: 'Secure & Safe',
-      description: 'Govt. Verified',
-      color: 'text-amber-500',
-      bg: 'bg-amber-50',
-    },
-  ];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,128 +37,172 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="mb-6">
-      {/* Hero Card */}
-      <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-white">
+    <div className="mb-8">
+      {/* ── HERO CONTAINER ── */}
+      <div className="relative w-full rounded-[32px] overflow-hidden shadow-sm" style={{ minHeight: '520px' }}>
+        
+        {/* Background Image */}
+        <img
+          src={heroBg}
+          alt="Taj Mahal"
+          referrerPolicy="no-referrer"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: 'center 30%' }}
+        />
 
-        {/* ── MAIN BANNER: full-width Taj Mahal background ── */}
-        <div className="relative overflow-hidden" style={{ minHeight: '240px' }}>
+        {/* Warm Cream Gradient Overlay (Matches the image fade) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to right, rgba(255, 251, 244, 1) 0%, rgba(255, 251, 244, 0.95) 28%, rgba(255, 251, 244, 0.6) 45%, rgba(255, 255, 255, 0) 65%)',
+          }}
+        />
 
-          {/* Background: Taj Mahal full width */}
-          <img
-            src={heroBg}
-            alt="Taj Mahal"
-            referrerPolicy="no-referrer"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: 'center 30%' }}
-          />
+        {/* ── LEFT CONTENT CONTENT ── */}
+        <div className="relative z-10 flex flex-col justify-center px-12 pt-16 pb-32" style={{ maxWidth: '65%' }}>
+          
+          {/* Paper-plane + dotted trail */}
+          <div className="absolute top-12 left-[300px] pointer-events-none select-none">
+            <svg viewBox="0 0 200 60" width="150" height="60" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
+              <path
+                d="M 10 45 Q 60 20, 110 25 Q 140 28, 165 10"
+                fill="none"
+                stroke="#16a34a"
+                strokeWidth="2"
+                strokeDasharray="4 5"
+                opacity="0.9"
+              />
+              <g transform="translate(162, 5) rotate(-35)">
+                <polygon points="0,0 12,4 0,8 3,4" fill="#16a34a" />
+              </g>
+            </svg>
+          </div>
 
-          {/* Dark overlay to dim the image */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'rgba(0, 0, 0, 0.30)' }}
-          />
+          {/* Heading with 3 Custom Gradient Lines */}
+          <h1 className="text-[52px] lg:text-[72px] font-black leading-[1.05] tracking-tight mb-5">
+            <div
+              style={{
+                background: 'linear-gradient(90deg, #F97316 0%, #F97316 12%, #0f172a 25%, #0f172a 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Explore
+            </div>
+            <div
+              style={{
+                background: 'linear-gradient(90deg, #15803d 0%, #15803d 18%, #0f172a 32%, #0f172a 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Incredible
+            </div>
+            <div
+              style={{
+                background: 'linear-gradient(90deg, #15803d 0%, #15803d 30%, #F97316 60%, #F97316 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                paddingRight: '10px' // Prevent clipping of italic/large fonts
+              }}
+            >
+              India
+            </div>
+          </h1>
 
-          {/* White-to-transparent gradient overlay on left half for text readability */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(to right, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 30%, rgba(255,255,255,0.55) 52%, rgba(255,255,255,0) 68%)',
-            }}
-          />
+          {/* Subtitle */}
+          <p className="text-[17px] text-gray-600 leading-relaxed mb-8" style={{ maxWidth: '380px' }}>
+            {t(
+              'hero.exploreDesc',
+              'Discover verified places, smart itineraries and real-time travel insights across India.'
+            )}
+          </p>
 
-          {/* Content pane (left aligned, sits on top of the gradient) */}
-          <div className="relative z-10 flex flex-col justify-center px-10 py-9" style={{ maxWidth: '55%' }}>
-
-            {/* Heading — Dark text with India in Tricolor gradient */}
-            <div className="relative mb-3">
-              {/* Paper-plane + dotted trail positioned relative to the heading */}
-              <div className="absolute top-0 right-10 pointer-events-none select-none" style={{ transform: 'translateY(-50%)' }}>
-                <svg viewBox="0 0 200 60" width="180" height="60" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
-                  <path
-                    d="M 10 50 Q 60 20, 120 30 Q 160 36, 185 10"
-                    fill="none"
-                    stroke="#22c55e"
-                    strokeWidth="1.5"
-                    strokeDasharray="4 4"
-                    opacity="0.8"
-                  />
-                  <g transform="translate(175, 4) rotate(-35)">
-                    <polygon points="0,0 14,5 0,10 3,5" fill="#22c55e" />
-                  </g>
+          {/* Search Bar */}
+          <form onSubmit={handleSearch}>
+            <div
+              className="flex items-center rounded-full bg-white p-2"
+              style={{ 
+                maxWidth: '420px', 
+                boxShadow: '0 8px 25px rgba(0,0,0,0.06), 0 2px 10px rgba(0,0,0,0.04)',
+              }}
+            >
+              <Search className="ml-4 text-gray-400 shrink-0" size={20} />
+              <input
+                type="text"
+                placeholder={t('hero.searchPlaceholder', 'Where do you want to explore?')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 pl-3 pr-3 py-3 text-[15px] bg-transparent focus:outline-none text-gray-800 placeholder-gray-400"
+              />
+              <button
+                type="submit"
+                className="w-12 h-11 rounded-full bg-[#16a34a] hover:bg-green-600 active:scale-95 text-white transition-all flex items-center justify-center shrink-0 mr-1"
+              >
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
-              </div>
+              </button>
+            </div>
+          </form>
+        </div>
 
-              <h1 className="text-[44px] lg:text-[56px] font-black leading-[1.1] text-[#0f172a] tracking-tight">
-                Explore<br />
-                Incredible{' '}
-                <span
-                  style={{
-                    background: 'linear-gradient(90deg, #FF9933 0%, #FF9933 25%, #FFFFFF 50%, #138808 75%, #138808 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.15))',
-                    display: 'inline-block'
-                  }}
-                >
-                  India
-                </span>
-              </h1>
+        {/* ── BOTTOM FLOATING BADGES ── */}
+        <div className="absolute bottom-6 left-6 right-6">
+          <div 
+            className="flex items-center justify-between bg-white rounded-full px-8 py-5"
+            style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.08)' }}
+          >
+            {/* Badge 1 */}
+            <div className="flex items-center gap-4 flex-1 justify-center">
+              <ShieldTickIcon className="w-7 h-7 text-green-600" />
+              <div>
+                <p className="text-[14px] font-bold text-gray-900 leading-tight">Verified Places</p>
+                <p className="text-[13px] text-gray-400">100% Trusted</p>
+              </div>
             </div>
 
-            {/* Subtitle */}
-            <p className="text-sm text-gray-500 leading-relaxed mb-6" style={{ maxWidth: '300px' }}>
-              {t(
-                'hero.exploreDesc',
-                'Discover verified places, smart itineraries and real-time travel insights across India.'
-              )}
-            </p>
+            {/* Divider */}
+            <div className="w-[1px] h-10 bg-gray-100"></div>
 
-            {/* Search Bar */}
-            <form onSubmit={handleSearch}>
-              <div
-                className="flex items-center rounded-full border border-gray-200 shadow-sm p-1.5"
-                style={{ maxWidth: '400px', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)' }}
-              >
-                <Search className="ml-3 text-gray-400 shrink-0" size={18} />
-                <input
-                  type="text"
-                  placeholder={t('hero.searchPlaceholder', 'Where do you want to explore?')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1 pl-3 pr-3 py-2.5 text-sm bg-transparent focus:outline-none text-gray-800 placeholder-gray-400"
-                />
-                <button
-                  type="submit"
-                  className="px-5 py-2.5 rounded-full bg-[#138808] hover:bg-green-700 active:scale-95 text-white transition-all flex items-center justify-center"
-                >
-                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
+            {/* Badge 2 */}
+            <div className="flex items-center gap-4 flex-1 justify-center">
+              <Cloud className="w-7 h-7 text-blue-400" />
+              <div>
+                <p className="text-[14px] font-bold text-gray-900 leading-tight">Live Weather</p>
+                <p className="text-[13px] text-gray-400">Real-time Updates</p>
               </div>
-            </form>
+            </div>
+
+            {/* Divider */}
+            <div className="w-[1px] h-10 bg-gray-100"></div>
+
+            {/* Badge 3 */}
+            <div className="flex items-center gap-4 flex-1 justify-center">
+              <Accessibility className="w-7 h-7 text-purple-600" />
+              <div>
+                <p className="text-[14px] font-bold text-gray-900 leading-tight">Accessible Travel</p>
+                <p className="text-[13px] text-gray-400">Explore Friendly</p>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="w-[1px] h-10 bg-gray-100"></div>
+
+            {/* Badge 4 */}
+            <div className="flex items-center gap-4 flex-1 justify-center">
+              <LockIcon className="w-7 h-7 text-orange-500" />
+              <div>
+                <p className="text-[14px] font-bold text-gray-900 leading-tight">Secure & Safe</p>
+                <p className="text-[13px] text-gray-400">Govt. Verified</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ── BOTTOM STRIP: Quick-access badges ── */}
-        <div className="border-t border-gray-100 grid grid-cols-4 divide-x divide-gray-100 bg-white">
-          {quickAccessCards.map((card) => (
-            <div
-              key={card.label}
-              className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors cursor-pointer"
-            >
-              <div className={`shrink-0 w-8 h-8 rounded-lg ${card.bg} flex items-center justify-center ${card.color}`}>
-                {card.icon}
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-800">{card.label}</p>
-                <p className="text-xs text-gray-400">{card.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
