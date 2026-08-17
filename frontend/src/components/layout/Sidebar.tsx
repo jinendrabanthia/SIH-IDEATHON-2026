@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -13,8 +13,10 @@ import {
   BookOpen,
   AlertCircle,
   ChevronRight,
+  X,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import ShinyText from '../ui/ShinyText';
 
 interface NavItem {
   path: string;
@@ -28,7 +30,12 @@ interface QuickAccessItem {
   icon: React.ReactNode;
 }
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
   const { t } = useTranslation();
   const location = useLocation();
 
@@ -51,10 +58,28 @@ export const Sidebar: React.FC = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  // Close sidebar on route change on mobile
+  useEffect(() => {
+    if (isOpen && onClose) {
+      onClose();
+    }
+  }, [location.pathname]);
+
   return (
-    <aside className="fixed left-0 top-0 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 overflow-y-auto z-40 transition-colors">
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+          onClick={onClose}
+        />
+      )}
+
+      <aside className={`fixed left-0 top-0 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 overflow-y-auto z-50 transition-transform duration-300 ${
+        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      }`}>
       {/* Logo Section */}
-      <div className="p-5 border-b border-gray-200 dark:border-gray-800">
+      <div className="p-5 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
         <Link to="/dashboard" className="flex items-center gap-2 flex-shrink-0">
           <div className="w-8 h-8 flex items-center justify-center">
             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-[#1f2937] dark:text-white">
@@ -70,13 +95,13 @@ export const Sidebar: React.FC = () => {
             </svg>
           </div>
           <div className="leading-tight">
-            <div className="text-xl font-bold tracking-tight">
-              <span className="text-[#1f2937] dark:text-white">Marg</span>
-              <span className="text-[#16a34a] dark:text-green-400">Darshak</span>
-            </div>
+            <ShinyText text="MargDarshak" className="text-xl font-bold tracking-tight" speed={3} />
             <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">AI Travel Assistant</div>
           </div>
         </Link>
+        <button onClick={onClose} className="lg:hidden p-1 rounded-md text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <X size={20} />
+        </button>
       </div>
 
       {/* Main Navigation */}
@@ -127,5 +152,6 @@ export const Sidebar: React.FC = () => {
 
 
     </aside>
+    </>
   );
 };
