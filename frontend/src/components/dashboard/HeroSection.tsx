@@ -18,7 +18,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
       icon: <ShieldCheck size={20} strokeWidth={1.8} />,
       label: 'Verified Places',
       description: '100% Trusted',
-      color: 'text-green-500',
+      color: 'text-green-600',
       bg: 'bg-green-50',
     },
     {
@@ -55,53 +55,87 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
   return (
     <div className="mb-6">
       {/* Hero Card */}
-      <div
-        className="rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-white"
-        style={{ minHeight: '280px' }}
-      >
-        {/* Top part: text left + image right */}
-        <div className="flex" style={{ minHeight: '240px' }}>
+      <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-white">
 
-          {/* ── LEFT: text pane ── */}
+        {/* ── MAIN BANNER: full-width Taj Mahal background ── */}
+        <div className="relative overflow-hidden" style={{ minHeight: '240px' }}>
+
+          {/* Background: Taj Mahal full width */}
+          <img
+            src={heroBg}
+            alt="Taj Mahal"
+            referrerPolicy="no-referrer"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: 'center 30%' }}
+          />
+
+          {/* White-to-transparent gradient overlay on left half for text readability */}
           <div
-            className="relative flex flex-col justify-center px-10 py-8"
-            style={{ width: '50%', background: '#ffffff' }}
-          >
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(to right, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 30%, rgba(255,255,255,0.60) 52%, rgba(255,255,255,0) 68%)',
+            }}
+          />
 
-            {/* Paper-plane animation */}
-            <div className="absolute top-8 right-8 pointer-events-none select-none">
-              <svg
-                viewBox="0 0 200 60"
-                width="180"
-                height="60"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ overflow: 'visible' }}
-              >
-                {/* Dotted flight path */}
+          {/* Content pane (left aligned, sits on top of the gradient) */}
+          <div className="relative z-10 flex flex-col justify-center px-10 py-9" style={{ maxWidth: '55%' }}>
+
+            {/* Paper-plane + dotted trail */}
+            <div className="absolute top-6 right-[-30px] pointer-events-none select-none">
+              <svg viewBox="0 0 200 60" width="180" height="60" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
                 <path
                   d="M 10 50 Q 60 20, 120 30 Q 160 36, 185 10"
                   fill="none"
                   stroke="#22c55e"
                   strokeWidth="1.5"
                   strokeDasharray="4 4"
-                  opacity="0.7"
+                  opacity="0.8"
                 />
-                {/* Plane icon at end */}
                 <g transform="translate(175, 4) rotate(-35)">
                   <polygon points="0,0 14,5 0,10 3,5" fill="#22c55e" />
                 </g>
               </svg>
             </div>
 
-            {/* Heading */}
-            <h1 className="text-4xl lg:text-5xl font-black leading-tight mb-3 text-gray-900">
-              Explore<br />
-              Incredible{' '}
-              <span className="text-green-500">India</span>
+            {/* Heading — India Tricolor gradient with fade */}
+            <h1 className="text-4xl lg:text-5xl font-black leading-[1.15] mb-3">
+              <span
+                style={{
+                  background: 'linear-gradient(90deg, #FF6B00 0%, #FF9933 30%, #1a1a2e 60%, #1a1a2e 70%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                Explore
+              </span>
+              <br />
+              <span
+                style={{
+                  background: 'linear-gradient(90deg, #1a1a2e 0%, #1a1a2e 30%, #138808 65%, #0a6b05 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                Incredible
+              </span>
+              {' '}
+              <span
+                style={{
+                  background: 'linear-gradient(135deg, #FF9933 0%, #FF9933 25%, #ffffff 45%, #138808 70%, #0a6b05 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  filter: 'drop-shadow(0 0 12px rgba(255,153,51,0.3))',
+                }}
+              >
+                India
+              </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-sm text-gray-500 leading-relaxed max-w-xs mb-6">
+            <p className="text-sm text-gray-500 leading-relaxed mb-6" style={{ maxWidth: '300px' }}>
               {t(
                 'hero.exploreDesc',
                 'Discover verified places, smart itineraries and real-time travel insights across India.'
@@ -110,7 +144,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
 
             {/* Search Bar */}
             <form onSubmit={handleSearch}>
-              <div className="flex items-center rounded-xl border border-gray-200 bg-gray-50 shadow-sm overflow-hidden" style={{ maxWidth: '380px' }}>
+              <div
+                className="flex items-center rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                style={{ maxWidth: '370px', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)' }}
+              >
                 <Search className="ml-3 text-gray-400 shrink-0" size={16} />
                 <input
                   type="text"
@@ -121,7 +158,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
                 />
                 <button
                   type="submit"
-                  className="m-1 px-3 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors flex items-center justify-center"
+                  className="m-1 px-3 py-2 rounded-lg bg-green-500 hover:bg-green-600 active:scale-95 text-white transition-all flex items-center justify-center"
                 >
                   <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -130,26 +167,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
               </div>
             </form>
           </div>
-
-          {/* ── RIGHT: Taj Mahal image ── */}
-          <div className="flex-1 relative overflow-hidden" style={{ width: '50%' }}>
-            <img
-              src={heroBg}
-              alt="Taj Mahal"
-              referrerPolicy="no-referrer"
-              className="absolute inset-0 w-full h-full object-cover object-center"
-              style={{ objectPosition: 'center 30%' }}
-            />
-            {/* Soft gradient blending left edge into white */}
-            <div
-              className="absolute inset-y-0 left-0 w-24"
-              style={{ background: 'linear-gradient(to right, #ffffff, transparent)' }}
-            />
-          </div>
         </div>
 
         {/* ── BOTTOM STRIP: Quick-access badges ── */}
-        <div className="border-t border-gray-100 grid grid-cols-4 divide-x divide-gray-100">
+        <div className="border-t border-gray-100 grid grid-cols-4 divide-x divide-gray-100 bg-white">
           {quickAccessCards.map((card) => (
             <div
               key={card.label}
