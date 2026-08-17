@@ -39,7 +39,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
   return (
     <div className="mb-8">
       {/* ── HERO CONTAINER ── */}
-      <div className="relative w-full rounded-[32px] overflow-hidden shadow-sm" style={{ minHeight: '540px' }}>
+      <div className="relative w-full rounded-[28px] overflow-hidden shadow-sm mx-2" style={{ minHeight: '640px' }}>
         
         {/* Background Image */}
         <img
@@ -62,13 +62,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
         <div className="relative z-10 flex flex-col justify-center px-14 pt-16 pb-36" style={{ maxWidth: '65%' }}>
           
           {/* Heading with Exact Gradient Matches */}
-          <h1 className="text-[64px] lg:text-[76px] font-bold mb-5 select-none" style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 0.98, letterSpacing: '-2px' }}>
+          <h1 className="text-[68px] lg:text-[80px] font-bold mb-5 select-none" style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.05, letterSpacing: '-1.5px' }}>
             
             {/* EXPLORE */}
             <div className="relative inline-block">
               <span
                 style={{
-                  background: 'linear-gradient(90deg, #ea580c 0%, #f97316 28%, #8b2915 35%, #003366 45%, #002244 100%)',
+                  /* E=orange, xp=orange-brown, l=dark-brown, ore=dark-navy */
+                  background: 'linear-gradient(90deg, #f97316 0%, #f97316 14%, #c2410c 22%, #7f1d1d 30%, #1e3a5f 40%, #0f2d4a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
@@ -110,7 +111,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
             {/* INCREDIBLE */}
             <div
               style={{
-                background: 'linear-gradient(90deg, #16a34a 0%, #15803d 35%, #004d73 45%, #003366 55%, #002244 100%)',
+                /* I=green, ncredi=green-to-teal-to-dark-navy, ble=dark-navy */
+                background: 'linear-gradient(90deg, #16a34a 0%, #16a34a 12%, #0d9488 28%, #0369a1 42%, #1e3a5f 55%, #0f2d4a 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -126,7 +128,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
             {/* INDIA */}
             <div
               style={{
-                background: 'linear-gradient(90deg, #16a34a 0%, #15803d 40%, #cca300 50%, #f97316 60%, #ea580c 100%)',
+                /* I=green, nd=green-to-gold, ia=gold-to-orange */
+                background: 'linear-gradient(90deg, #16a34a 0%, #16a34a 35%, #ca8a04 58%, #f97316 78%, #ea580c 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
