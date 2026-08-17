@@ -32,6 +32,8 @@ const preferencesSchema = z.object({
 const profileUpdateSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   preferredLanguage: z.enum(['en', 'hi', 'or']).optional(),
+  emergencyContactName: z.string().max(100).optional(),
+  emergencyContactPhone: z.string().max(20).optional(),
 }).strict();
 
 // ─── GET /api/v1/users/me — fetch current user profile ──────────────────────
@@ -46,6 +48,8 @@ router.get('/me', async (req, res, next) => {
         email: true,
         name: true,
         preferredLanguage: true,
+        emergencyContactName: true,
+        emergencyContactPhone: true,
         createdAt: true,
         preferences: true,
       },
@@ -75,6 +79,8 @@ router.patch('/me', sanitizeBody, async (req, res, next) => {
         email: true,
         name: true,
         preferredLanguage: true,
+        emergencyContactName: true,
+        emergencyContactPhone: true,
         updatedAt: true,
       },
     });
