@@ -10,7 +10,7 @@ interface Attraction {
   rating: number;
   accessibility: string[];
   verified: boolean;
-  emoji: string;
+  image: string;
 }
 
 export const ExploreIndia: React.FC = () => {
@@ -29,7 +29,7 @@ export const ExploreIndia: React.FC = () => {
       rating: 4.8,
       accessibility: ['Visual Support', 'Hearing Support'],
       verified: true,
-      emoji: '🙏',
+      image: 'https://images.unsplash.com/photo-1623910382367-e9a66d6287ee?q=80&w=1000&auto=format&fit=crop',
     },
     {
       id: '2',
@@ -39,7 +39,7 @@ export const ExploreIndia: React.FC = () => {
       rating: 4.7,
       accessibility: ['Hearing Support'],
       verified: true,
-      emoji: '⛰️',
+      image: 'https://images.unsplash.com/photo-1596727278235-5a7bb7d5d7e6?q=80&w=1000&auto=format&fit=crop',
     },
     {
       id: '3',
@@ -49,7 +49,7 @@ export const ExploreIndia: React.FC = () => {
       rating: 4.6,
       accessibility: ['Wheelchair', 'Visual Support', 'Hearing Support'],
       verified: true,
-      emoji: '🏛️',
+      image: 'https://images.unsplash.com/photo-1566127444941-8e124ffa8217?q=80&w=1000&auto=format&fit=crop',
     },
     {
       id: '4',
@@ -59,7 +59,7 @@ export const ExploreIndia: React.FC = () => {
       rating: 4.9,
       accessibility: ['Wheelchair'],
       verified: true,
-      emoji: '⛩️',
+      image: 'https://images.unsplash.com/photo-1623910382029-79a785d03a11?q=80&w=1000&auto=format&fit=crop',
     },
   ];
 
@@ -139,8 +139,8 @@ export const ExploreIndia: React.FC = () => {
               key={attraction.id}
               className="bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer"
             >
-              <div className="relative h-48 bg-gradient-to-br from-orange-200 to-amber-100 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
-                <span className="text-6xl">{attraction.emoji}</span>
+              <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
+                <img src={attraction.image} alt={attraction.name} className="w-full h-full object-cover" />
                 {attraction.verified && (
                   <div className="absolute top-4 right-4 bg-green-500 text-white rounded-full p-2 flex items-center gap-1">
                     <CheckCircle size={16} />

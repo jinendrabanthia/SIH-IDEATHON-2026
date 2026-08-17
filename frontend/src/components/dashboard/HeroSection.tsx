@@ -16,10 +16,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
   const navigate = useNavigate();
 
   const quickAccessCards = [
-    { icon: <ShieldCheck size={18} />, label: t('hero.verifiedPlaces', 'Verified Places'), description: t('hero.trustedDesc', '100% Trusted'), color: 'text-green-600' },
-    { icon: <Cloud size={18} />, label: t('hero.liveWeather', 'Live Weather'), description: t('hero.weatherDesc', 'Real-time Updates'), color: 'text-blue-500' },
-    { icon: <Handshake size={18} />, label: t('hero.accessible', 'Accessible Travel'), description: t('hero.accessibleDesc', 'Everyone Friendly'), color: 'text-purple-500' },
-    { icon: <ShieldCheck size={18} />, label: t('hero.secureLabel', 'Secure & Safe'), description: t('hero.secureDesc', 'Govt. Verified'), color: 'text-orange-500' },
+    { icon: <ShieldCheck size={18} />, label: t('hero.verifiedPlaces', 'Verified Places'), description: t('hero.trustedDesc', 'Powered by AI Trust'), color: 'text-green-600' },
+    { icon: <Cloud size={18} />, label: t('hero.liveWeather', 'Live Updates'), description: t('hero.weatherDesc', 'Weather & Alerts'), color: 'text-blue-500' },
+    { icon: <Handshake size={18} />, label: t('hero.accessible', 'Smart Itineraries'), description: t('hero.accessibleDesc', 'Personalized Plans'), color: 'text-purple-500' },
+    { icon: <ShieldCheck size={18} />, label: t('hero.secureLabel', 'Platform Impact'), description: t('hero.secureDesc', 'Live Analytics'), color: 'text-orange-500' },
   ];
 
   const handleSearch = (e: React.FormEvent) => {
@@ -38,7 +38,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
         <div className="flex" style={{ minHeight: '340px' }}>
           {/* Left — text pane */}
           <div
-            className="flex flex-col justify-between p-8 bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] dark:from-gray-800 dark:to-gray-900"
+            className="flex flex-col justify-between p-8 bg-slate-900"
             style={{
               width: '52%',
             }}
@@ -47,13 +47,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearch }) => {
 
             {/* Title */}
             <div className="flex-1 flex flex-col justify-center">
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white leading-tight mb-3">
-                {t('hero.exploreTitle', 'Explore')}<br />
-                {t('hero.exploreSubtitle', 'Incredible')}{' '}
-                <span className="text-green-600 dark:text-green-400">{t('hero.exploreCountry', 'India')}</span>
+              <h1 className="text-4xl lg:text-5xl font-black leading-tight mb-3"
+                  style={{
+                    background: 'linear-gradient(90deg, #f97316 0%, #f97316 28%, #ffffff 38%, #ffffff 58%, #22c55e 68%, #22c55e 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    color: 'transparent'
+                  }}>
+                Explore Incredible India
               </h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-xs">
-                {t('hero.exploreDesc', 'Discover verified places, smart itineraries and real-time travel insights across India.')}
+              <p className="text-sm text-slate-300 leading-relaxed max-w-sm">
+                {t('hero.exploreDesc', 'Access live weather updates, explore popular destinations, and get AI-powered trip summaries across India.')}
               </p>
             </div>
 

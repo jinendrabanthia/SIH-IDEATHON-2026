@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { MainLayout } from '../components/layout/MainLayout';
@@ -7,11 +7,26 @@ import { tripsApi, Trip } from '../api/services/tripsApi';
 import { useAuth } from '../lib/AuthContext';
 import { AuthModal } from '../components/ui/AuthModal';
 
+const DRAFT_KEY = 'margdarshak_drafts';
+
 export const MyTripsPage: React.FC = () => {
   const { user, token } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'completed' | 'all' | 'drafts'>('upcoming');
+  const [localDrafts, setLocalDrafts] = useState<any[]>([]);
   const qc = useQueryClient();
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem(DRAFT_KEY) || '[]');
+    setLocalDrafts(stored);
+  }, []);
+
+  const removeDraft = (id: string) => {
+    const updated = localDrafts.filter(d => d.id !== id);
+    setLocalDrafts(updated);
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(updated));
+  };
 
   // Fetch trips only when authenticated
   const { data: trips = [], isLoading, error } = useQuery({
@@ -110,8 +125,96 @@ export const MyTripsPage: React.FC = () => {
           </div>
         )}
 
+        {/* Tabs */}
+        {!isLoading && !error && (trips.length > 0 || localDrafts.length > 0) && (
+          <div className="flex items-center gap-2 mb-6 border-b border-gray-200 pb-2">
+            {(['upcoming', 'completed', 'all', 'drafts'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold capitalize transition-colors ${
+                  activeTab === tab
+                    ? 'bg-orange-50 text-orange-600'
+                    : 'text-gray-500 hover:bg-gray-50'
+                }`}
+              >
+                {tab}
+                {tab === 'drafts' && localDrafts.length > 0 && (
+                  <span className="ml-1.5 px-1.5 py-0.5 text-xs bg-orange-500 text-white rounded-full">{localDrafts.length}</span>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Local Drafts Tab */}
+        {activeTab === 'drafts' && (
+          <div className="space-y-4">
+            {localDrafts.length === 0 && (
+              <div className="text-center py-16">
+                <div className="text-5xl mb-4">📋</div>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">No drafts saved</h3>
+                <p className="text-gray-500 text-sm">Go to Plan Trip and save a draft to see it here.</p>
+              </div>
+            )}
+            {localDrafts.map((draft) => (
+              <div key={draft.id} className="bg-white rounded-2xl border-2 border-dashed border-orange-200 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-3 flex-wrap">
+                      <span className="text-xl font-bold text-gray-900">{draft.title}</span>
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold border bg-slate-100 text-slate-600 border-slate-200">DRAFT</span>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                      <span className="flex items-center gap-1.5 text-gray-600">
+                        <span className="text-orange-500">🚉</span>
+                        {draft.transportMode}
+                        {draft.travelClass && ` · ${draft.travelClass.split('–')[0].trim()}`}
+                      </span>
+                      <span className="flex items-center gap-1.5 text-gray-600">
+                        <span className="text-orange-500">📅</span>
+                        {draft.startDate || 'No date'} · {draft.duration} days
+                      </span>
+                      {draft.pnrNumber && (
+                        <span className="flex items-center gap-1.5 text-gray-600 font-mono text-xs">
+                          PNR: {draft.pnrNumber}
+                        </span>
+                      )}
+                      {draft.flightNumber && (
+                        <span className="flex items-center gap-1.5 text-gray-600 font-mono text-xs">
+                          Flight: {draft.flightNumber}
+                        </span>
+                      )}
+                    </div>
+                    {draft.interests?.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-3">
+                        {draft.interests.slice(0, 5).map((i: string) => (
+                          <span key={i} className="text-xs bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full">{i}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => removeDraft(draft.id)}
+                    className="shrink-0 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Remove draft"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* API Trips */}
+        {activeTab !== 'drafts' && (
         <div className="space-y-4">
-          {trips.map((trip) => (
+          {trips.filter(trip => {
+            if (activeTab === 'upcoming') return trip.status !== 'COMPLETED';
+            if (activeTab === 'completed') return trip.status === 'COMPLETED';
+            return true;
+          }).map((trip) => (
             <div key={trip.id} className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
@@ -166,37 +269,11 @@ export const MyTripsPage: React.FC = () => {
                     </div>
                   )}
                 </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-1 shrink-0">
-                  <button
-                    title={trip.isPublic ? 'Make private' : 'Share publicly'}
-                    onClick={() => shareMutation.mutate({ id: trip.id, isPublic: !trip.isPublic })}
-                    disabled={shareMutation.isPending}
-                    className="p-2 rounded-lg transition-colors hover:bg-purple-50"
-                  >
-                    {trip.isPublic
-                      ? <Unlock size={17} className="text-purple-600" />
-                      : <Share2 size={17} className="text-gray-500" />
-                    }
-                  </button>
-                  <button
-                    title="Delete trip"
-                    onClick={() => {
-                      if (window.confirm('Delete this trip? This cannot be undone.')) {
-                        deleteMutation.mutate(trip.id);
-                      }
-                    }}
-                    disabled={deleteMutation.isPending}
-                    className="p-2 rounded-lg transition-colors hover:bg-red-50"
-                  >
-                    <Trash2 size={17} className="text-red-500" />
-                  </button>
-                </div>
               </div>
             </div>
           ))}
         </div>
+        )}
       </div>
     </MainLayout>
   );
