@@ -29,7 +29,7 @@ export const ExploreIndia: React.FC = () => {
       rating: 4.8,
       accessibility: ['Visual Support', 'Hearing Support'],
       verified: true,
-      image: 'https://images.unsplash.com/photo-1623910382367-e9a66d6287ee?q=80&w=1000&auto=format&fit=crop',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Lingaraj_Temple_%2C_Bhubaneswar.jpg/960px-Lingaraj_Temple_%2C_Bhubaneswar.jpg',
     },
     {
       id: '2',
@@ -39,7 +39,7 @@ export const ExploreIndia: React.FC = () => {
       rating: 4.7,
       accessibility: ['Hearing Support'],
       verified: true,
-      image: 'https://images.unsplash.com/photo-1596727278235-5a7bb7d5d7e6?q=80&w=1000&auto=format&fit=crop',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/a/a4/Udayagiri_WIKI.JPG',
     },
     {
       id: '3',
@@ -49,7 +49,7 @@ export const ExploreIndia: React.FC = () => {
       rating: 4.6,
       accessibility: ['Wheelchair', 'Visual Support', 'Hearing Support'],
       verified: true,
-      image: 'https://images.unsplash.com/photo-1566127444941-8e124ffa8217?q=80&w=1000&auto=format&fit=crop',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Bhubaneswar_State_Museum.jpg/960px-Bhubaneswar_State_Museum.jpg',
     },
     {
       id: '4',
@@ -59,7 +59,7 @@ export const ExploreIndia: React.FC = () => {
       rating: 4.9,
       accessibility: ['Wheelchair'],
       verified: true,
-      image: 'https://images.unsplash.com/photo-1623910382029-79a785d03a11?q=80&w=1000&auto=format&fit=crop',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/ShantiSthupa_Dhauli.jpg/960px-ShantiSthupa_Dhauli.jpg',
     },
   ];
 
