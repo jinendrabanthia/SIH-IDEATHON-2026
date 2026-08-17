@@ -6,6 +6,7 @@ import { WeatherWidget } from '../components/dashboard/WeatherWidget';
 import { UpcomingTripsWidget } from '../components/dashboard/UpcomingTripsWidget';
 import { RegionalMapWidget } from '../components/dashboard/RegionalMapWidget';
 import { TravelPulseWidget } from '../components/dashboard/TravelPulseWidget';
+import SpotlightCard from '../components/ui/SpotlightCard';
 
 export const DashboardPage: React.FC = () => {
   return (
@@ -21,7 +22,7 @@ export const DashboardPage: React.FC = () => {
           <PopularDestinations />
 
           {/* 3D Model of India Coming Soon Box */}
-          <div className="relative w-full min-h-[440px] rounded-3xl border-2 border-blue-500 dark:border-blue-400 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 overflow-hidden shadow-2xl flex flex-col items-center justify-center text-center p-8 group transition-all duration-300">
+          <SpotlightCard className="w-full min-h-[440px] border-2 border-blue-500 dark:border-blue-400 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex flex-col items-center justify-center text-center p-8 group transition-all duration-300">
             {/* Background 3D Radial Glow Effects */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-orange-500/20 transition-all duration-700 pointer-events-none" />
             <div className="absolute -top-20 -left-20 w-64 h-64 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -47,7 +48,7 @@ export const DashboardPage: React.FC = () => {
               <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-ping" />
               <span>Next Generation Feature • In Development</span>
             </div>
-          </div>
+          </SpotlightCard>
         </div>
 
         {/* ── Right Column ── */}
