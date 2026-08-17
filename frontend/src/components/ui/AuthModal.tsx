@@ -9,7 +9,7 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMode = 'login' }) => {
-  const { login, register, isLoading } = useAuth();
+  const { login, register, signInWithGoogle, isLoading } = useAuth();
   const [mode, setMode] = useState<'login' | 'register'>(defaultMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -76,6 +76,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultMo
             {error}
           </div>
         )}
+
+        {/* Google Auth Button */}
+        <button
+          onClick={async () => {
+            setError(null);
+            try {
+              await signInWithGoogle();
+            } catch (err: any) {
+              setError(err?.message || 'Google sign-in failed.');
+            }
+          }}
+          disabled={isLoading}
+          type="button"
+          className="w-full mb-4 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-white transition-all disabled:opacity-50"
+          style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}
+        >
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
+          Continue with Google
+        </button>
+
+        <div className="flex items-center gap-4 mb-4">
+          <div className="flex-1 h-px bg-white/10" />
+          <span className="text-xs text-slate-400 uppercase tracking-widest">or email</span>
+          <div className="flex-1 h-px bg-white/10" />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name (register only) */}
