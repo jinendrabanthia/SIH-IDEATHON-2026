@@ -348,6 +348,52 @@ export const PlanTripPage: React.FC = () => {
     flightNumber: '',
     interests: [] as string[],
   });
+  const [detecting, setDetecting] = useState(false);
+  const [mileage, setMileage] = useState(15);
+  const [petrolRate, setPetrolRate] = useState(104);
+
+  const getEstimatedDistance = (from: string, to: string): number => {
+    const clean = (s: string) => s.toLowerCase();
+    const f = clean(from);
+    const t = clean(to);
+    if (f.includes('delhi') && t.includes('jaipur')) return 270;
+    if (f.includes('mumbai') && t.includes('goa')) return 590;
+    if (f.includes('bengaluru') && t.includes('leh')) return 3100;
+    if (f.includes('delhi') && t.includes('mumbai')) return 1420;
+    if (f.includes('bengaluru') && t.includes('goa')) return 560;
+    if (f.includes('bhubaneswar') && t.includes('puri')) return 60;
+    if (f.includes('chennai') && t.includes('bengaluru')) return 350;
+    return 450; // default fallback km
+  };
+
+  const handleDetectDetails = () => {
+    const val = tripData.transportMode === 'Train' ? tripData.pnrNumber : tripData.flightNumber;
+    if (!val) {
+      alert('Please enter a PNR or Flight number first.');
+      return;
+    }
+    setDetecting(true);
+    setTimeout(() => {
+      setDetecting(false);
+      if (tripData.transportMode === 'Train') {
+        setTripData(p => ({
+          ...p,
+          from: 'New Delhi (NDLS)',
+          to: 'Bhubaneswar (BBS)',
+          startDate: new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+          travelClass: '3A – Third AC',
+        }));
+      } else {
+        setTripData(p => ({
+          ...p,
+          from: 'New Delhi (DEL)',
+          to: 'Mumbai (BOM)',
+          startDate: new Date(Date.now() + 86400000 * 4).toISOString().split('T')[0],
+          travelClass: 'Economy',
+        }));
+      }
+    }, 1200);
+  };
 
   const interests = [
     'Heritage & Temples', 'Hill Stations', 'Beaches & Coastal', 'Wildlife & Safari',
@@ -434,6 +480,30 @@ export const PlanTripPage: React.FC = () => {
               <StationInput label="To" value={tripData.to} onChange={v => setTripData(p => ({ ...p, to: v }))} mode={tripData.transportMode} placeholder="Arrival city or station" />
             </div>
 
+            {/* Road Trip Settings */}
+            {tripData.transportMode === 'Road' && (
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 tracking-widest uppercase">Car Mileage (km/L)</label>
+                  <input
+                    type="number"
+                    value={mileage}
+                    onChange={e => setMileage(Math.max(1, Number(e.target.value)))}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 tracking-widest uppercase">Petrol Rate (₹/L)</label>
+                  <input
+                    type="number"
+                    value={petrolRate}
+                    onChange={e => setPetrolRate(Math.max(1, Number(e.target.value)))}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Travel Class + PNR/Flight Number */}
             {(tripData.transportMode === 'Train' || tripData.transportMode === 'Flight') && (
               <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm space-y-4">
@@ -462,17 +532,27 @@ export const PlanTripPage: React.FC = () => {
                   <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 tracking-widest uppercase">
                     {tripData.transportMode === 'Train' ? 'PNR Number' : 'Flight Number'}
                   </label>
-                  <input
-                    type="text"
-                    value={tripData.transportMode === 'Train' ? tripData.pnrNumber : tripData.flightNumber}
-                    onChange={e => setTripData(p => tripData.transportMode === 'Train'
-                      ? { ...p, pnrNumber: e.target.value }
-                      : { ...p, flightNumber: e.target.value }
-                    )}
-                    placeholder={tripData.transportMode === 'Train' ? 'Enter 10-digit PNR number' : 'e.g. AI-401, 6E-123'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm font-mono"
-                    maxLength={tripData.transportMode === 'Train' ? 10 : 8}
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={tripData.transportMode === 'Train' ? tripData.pnrNumber : tripData.flightNumber}
+                      onChange={e => setTripData(p => tripData.transportMode === 'Train'
+                        ? { ...p, pnrNumber: e.target.value }
+                        : { ...p, flightNumber: e.target.value }
+                      )}
+                      placeholder={tripData.transportMode === 'Train' ? 'Enter 10-digit PNR number' : 'e.g. AI-401, 6E-123'}
+                      className="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm font-mono"
+                      maxLength={tripData.transportMode === 'Train' ? 10 : 8}
+                    />
+                    <button
+                      type="button"
+                      disabled={detecting}
+                      onClick={handleDetectDetails}
+                      className="px-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-xs font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-1.5"
+                    >
+                      {detecting ? 'Detecting...' : 'Detect Details'}
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -575,6 +655,23 @@ export const PlanTripPage: React.FC = () => {
                     </p>
                   </div>
                 </div>
+
+                {tripData.transportMode === 'Road' && tripData.from && tripData.to && (
+                  <div className="p-3 bg-white/5 rounded-xl border border-white/5 space-y-2 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Est. Distance:</span>
+                      <span className="font-bold text-white">{getEstimatedDistance(tripData.from, tripData.to)} km</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Car Mileage:</span>
+                      <span className="font-bold text-white">{mileage} km/L</span>
+                    </div>
+                    <div className="flex justify-between border-t border-white/5 pt-1.5 font-bold text-sm text-orange-400">
+                      <span>Est. Fuel Cost:</span>
+                      <span>₹ {Math.round((getEstimatedDistance(tripData.from, tripData.to) / mileage) * petrolRate)}</span>
+                    </div>
+                  </div>
+                )}
                 
                 {(tripData.pnrNumber || tripData.flightNumber) && (
                   <div className="flex items-start gap-3">
